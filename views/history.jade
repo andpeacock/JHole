@@ -1,0 +1,56 @@
+extends layout
+
+block content
+  div.container
+    table#inpControl.table.table-condensed
+      thead
+        tr
+          td Real Value of Loot
+          td Estimated Total
+          td % of Estimated
+      tbody
+        tr
+          td.vralCont
+            input(type='text', class='form-control', id='totalRVal')
+          td.globalTotal 0
+          td.globalPer percent
+    table#payouts.table.table-striped.table-hover.table-bordered.table-condensed
+      thead
+        tr
+          td ID
+          td Date
+          td Load
+          td Update
+          td Paid Status
+          td Est. Total
+          td Final Total
+          td % of Est.
+      tbody
+        each d in data
+          tr
+            td.iid #{d.iid}
+            td #{d.date}
+            td.imp
+              button.import.btn.btn-primary Load
+            td.updt
+              button.updt.btn.btn-warning Update
+            if d.excl == true
+              td.paid(data-paid="false", data-excl="true")
+                button.btn.btn-default.loot-paid y
+                button.btn.btn-default.not-paid n
+                button.btn.btn-warning.loot-excl e
+            else
+              if d.paid == true
+                td.paid(data-paid="true", data-excl="false") 
+                  button.btn.btn-success.loot-paid y
+                  button.btn.btn-default.not-paid n
+                  button.btn.btn-default.loot-excl e
+              else
+                td.paid(data-paid="false", data-excl="false")
+                  button.btn.btn-default.loot-paid y 
+                  button.btn.btn-danger.not-paid n
+                  button.btn.btn-default.loot-excl e 
+            td.estTotal #{d.estTotal}
+            td.ftotal #{d.realVal}
+            td.perc percent
+  script(src='/js/historyjs.js')

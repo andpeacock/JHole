@@ -1,0 +1,18 @@
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
+    script(src='http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js')
+    script(src='/js/typeahead.js')
+
+  body
+    div.gc
+      nav#mainNav
+        a(href='/tracker', class='btn btn-primary') Tracker
+        a(href='/history', class='btn btn-primary') Loot History
+      block content
+
+      footer= ver

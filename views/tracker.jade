@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  div.container
+    h1#iid
+    nav#mainnav
+      button#addm.btn Add More
+      button#export.btn.btn-info Save
+      button#import.btn.btn-primary Load
+      input(type='text', class='typeahead-testing typeahead', id='tatest')
+    table#groups.table.table-condensed
+      thead
+        tr
+          td Group Number
+          td Total Estimate
+          td Number of People
+          td Split Per
+      tbody
+    table#vals.table.table-condensed
+      thead
+        tr
+          td Real Value of Loot
+          td Estimated Value
+          td % of Estimated
+          td Total Cut
+          td Total After Cut
+      tbody
+        tr
+          td.vReal
+            input(type='text', class='form-control')
+          td.vEst 0
+          td.vPer percent
+          td.vcTax 0
+          td.vTotal 0
+    table#main.table.table-striped.table-hover.table-bordered.table-condensed
+      thead
+        tr
+          td Total
+          td.gTotal 0
+      tbody
+  script(src='/js/trackerjs.js')

@@ -1,0 +1,129 @@
+div.gc {
+  width: 1170px;
+  margin: 0 auto;
+}
+#mainNav {
+  width: 1170px;
+  height: 32px;
+  background: #428bca;
+  padding: 0 15px;
+  position: relative;
+  top: -1px;
+  margin-bottom: 15px;
+  -webkit-border-bottom-right-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-bottomright: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+#mainNav a {
+  display: inline-block;
+  padding: 5px;
+  margin-right: 15px;
+  -webkit-border-top-left-radius: 0px;
+  -webkit-border-top-right-radius: 0px;
+  -moz-border-radius-topleft: 0px;
+  -moz-border-radius-topright: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+table tr td input {
+  width: 40px;
+}
+#main tr td {
+  text-align: center;
+}
+#main tr td.mname {
+  width: 175px;
+}
+#main tr td.payout {
+  width: 75px;
+}
+#main tr td button, #main tr td input {
+  width: 54px;
+  height: 30px;
+  display: block;
+  margin: 0 auto;
+}
+#vals td.vReal input {
+  width: 70px;
+}
+#delEntry {
+  float: right;
+}
+h1#iid {
+  margin-top: 0;
+}
+
+div#hload {
+  display: none;
+  -webkit-box-shadow: 0px 3px 2px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow:    0px 3px 2px rgba(50, 50, 50, 0.75);
+  box-shadow:         0px 3px 2px rgba(50, 50, 50, 0.75);
+  position: absolute;
+  width: 1190px;
+  padding: 10px;
+  top: 0;
+  background: #FFF;
+}
+
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+  margin-bottom: 0;
+}
+
+.tt-dropdown-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.2);
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0081c2;
+  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+  background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  color: #fff;
+}
+
+.tt-suggestion p {
+  margin: 0;
+  display: inline-block;
+}
+.tt-suggestion p.ta-date {
+  text-align: right;
+  float: right;
+}
+
+/* ---------- HISTORY STYLES ---------- */
+#inpControl td.vralCont input {
+  width: 170px;
+}
