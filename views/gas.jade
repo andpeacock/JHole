@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  table#gas.table.table-striped.table-hover.table-bordered.table-condensed
+    thead
+      tr
+        td Name
+        td C320
+        td C540
+        td Other
+        td Redeemable
+        td % to Next
+        td Redeemed
+    tbody
+      for d in data
+        tr
+          td.person #{d.person}
+          td.c320 #{d.c320}
+          td.c540 #{d.c540}
+          td.other #{d.other}
+          td.redeem 0
+          td.percent 0
+          td.redeemed #{d.redeemed}
+  script(src='/js/gasjs.js')

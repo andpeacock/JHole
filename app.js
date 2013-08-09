@@ -48,11 +48,19 @@ var shoppingListSchema = new mongoose.Schema({
     paid: {type: Boolean, default: false}
   }]
 });
+var gasTrackSchema = new mongoose.Schema({
+  person: String,
+  c320: {type: Number, default: 0},
+  c540: {type: Number, default: 0},
+  other: {type: Number, default: 0},
+  redeemed: {type: Number, default: 0}
+});
 // ----- END SCHEMAS -----
 
 // ----- MODELS -----
 var Loot = mongoose.model('Loot', lootTrackSchema);
 var List = mongoose.model('List', shoppingListSchema);
+var Gas  = mongoose.model('Gas', gasTrackSchema);
 // ----- END MODELS -----
 
 var cnct = false;
@@ -218,6 +226,21 @@ app.post('/listUp', function(req, res) {
 });
 // ----- END SHOPPING LIST
 
+// ----- GAS TRACKER -----
+app.get('/gas', function(req, res) {
+  Gas.find({}, function(err, results) {
+    if(err) {
+      return console.log(err);
+    }
+    res.render('gas', {
+      title: 'JHole',
+      ver: ver,
+      data: results
+    });
+  });
+});
+// ----- END GAS TRACKER -----
+
 // ----- TRACKER -----
 /* ----- Load tracker page ----- */
 app.get('/tracker', function(req, res) {
@@ -285,7 +308,7 @@ app.get('/trackerDelete', function(req, res) {
     res.send("Success");
     return;
   });
-})
+});
 
 /* ----- Send list for typeahead ----- */
 app.get('/iid', function(req, res) {
@@ -331,6 +354,27 @@ Loot.find({ 'iid': 'c$h2%' }, function(err, results) {
 });
 */
 // ----- END QUERY TEST -----
+
+// ----- DB Setup loops -----
+/*
+ * Gas DB setup
+for(var i = 0; i < memberList.length; i++) {
+  var g = new Gas({
+    person: memberList[i],
+    c320: 0,
+    c540: 0,
+    other: 0,
+    redeemed: 0
+  });
+  g.save(function(err, g) {
+    if(err) {
+      return console.log(err);
+    }
+    console.log(g);
+  });
+}
+*/
+// ----- END Setup loops -----
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
