@@ -37,22 +37,30 @@ var lootTrackSchema = new mongoose.Schema({
   paidOut: {type: Boolean, default: false},
   excl: {type: Boolean, default: false}
 });
-var payoutTrackSchema = new mongoose.Schema({
-  iid: String,
-  date: { type: Date, default: Date.now },
-  paid: Boolean,
-  estTotal: Number,
-  finalTotal: Number,
-  percentEst: Number
+var shoppingListSchema = new mongoose.Schema({
+  person: String,
+  items: [{
+    item: String,
+    quantity: Number,
+    buyer: {type: String, default: "none"},
+    cost: {type: Number, default: 0},
+    bought: {type: Boolean, default: false},
+    paid: {type: Boolean, default: false}
+  }]
 });
 // ----- END SCHEMAS -----
 
 // ----- MODELS -----
 var Loot = mongoose.model('Loot', lootTrackSchema);
+var List = mongoose.model('List', shoppingListSchema);
 // ----- END MODELS -----
 
 var cnct = false;
 var ver;
+var memberList = ["Ageudum", "Akrim Stenra",  "Andrew Jester", "Brutus King", "Cardavet",
+                  "Joe Poopy", "Lilum Biggum", "Melliflous Hyperion", "Nova Kairas", "Schaeffer Gaunt",
+                  "Silas Mieyli", "Simmons Hakoke", "Sinya Todako", "Tennigan Haldeye", "Yuri Lebbie",
+                  "Zencron en Thelles", "807Y6DI897TU"];
 
 fs.readFile('package.json', 'utf8', function(err, data) {
   if(err) {
@@ -61,8 +69,8 @@ fs.readFile('package.json', 'utf8', function(err, data) {
   ver = JSON.parse(data).version;
 });
 
-//mongoose.connect('mongodb://localhost/test'); //local
-mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
+mongoose.connect('mongodb://localhost/test'); //local
+//mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
@@ -85,6 +93,7 @@ app.get('/', function(req, res){
 // ----- END INDEX -----
 
 // ----- PAYOUT -----
+// Page load
 app.get('/history', function(req, res) {
   var d = [];
   Loot.find({}, function(err, results) {
@@ -105,7 +114,6 @@ app.get('/history', function(req, res) {
         excl: (results[i].excl) ? results[i].excl : false
       });
     }
-    console.log(d);
     res.render('history', {
       title: 'History',
       data: d,
@@ -115,6 +123,7 @@ app.get('/history', function(req, res) {
   });
 });
 
+// Update entry
 app.post('/historyUpdate', function(req, res) {
   var d = req.body;
   var updateData = {
@@ -122,8 +131,6 @@ app.post('/historyUpdate', function(req, res) {
     realVal: d.realVal,
     excl: d.excl
   };
-  console.log(d.paid);
-  //console.log(typeof d.paidStatus);
   Loot.update({'iid': d.iid}, updateData, function(err, aff) {
     if(err) {
       return console.log(err);
@@ -132,7 +139,84 @@ app.post('/historyUpdate', function(req, res) {
     res.send("Update Successful");
   });
 });
+
+/* ----- PARTIAL RENDER CALLS ----- */
+// History table render
+app.get('/historyTable', function(req, res) {
+  var d = [];
+  Loot.find({}, function(err, results) {
+    if(err) {
+      return console.log(err);
+    }
+    for(var i = 0; i < results.length; i++) {
+      var et = 0;
+      for (key in results[i].groups) {
+        et += parseInt(results[i].groups[key]['estTotal']);
+      }
+      d.push({
+        iid: results[i].iid,
+        date: moment(results[i].date).format("MM/DD"),
+        estTotal: et,
+        realVal: results[i].realVal,
+        paid: (results[i].paidOut) ? results[i].paidOut : false,
+        excl: (results[i].excl) ? results[i].excl : false
+      });
+    }
+    app.render('_historytbody', { data: d }, function(err, html){
+      res.send(html);
+    });
+  });
+});
+
+// Tracker table render
+app.get('/trackerTable', function(req, res) {
+  app.render('_trackertable', {members: memberList}, function(err, html) {
+    if(err) {
+      return console.log(err);
+    }
+    res.send(html);
+  });
+});
+/* ----- END PARTIAL CALLS ----- */
+
 // ----- END PAYOUT -----
+
+// ----- SHOPPING LIST -----
+app.get('/shopping', function(req, res){
+  var owed = {};
+  List.find({}, function(err, results) {
+    if(err) {
+      console.log("error");
+      return console.log(err);;
+    }
+    for(var i = 0; i < results.length; i++) {
+      for(var j = 0; j < results[i].items.length; j++) {
+        if(results[i].items[j].bought == true && results[i].items[j].paid == false) {
+          owed[results[i].items[j].buyer] += results[i].items[j].cost;
+        }
+      }
+    }
+    res.render('shopping', {
+      title: 'JHole',
+      ver: ver,
+      data: results
+    });
+  });
+});
+
+app.post('/listUp', function(req, res) {
+  var d = req.body;
+  console.log(d.arr);
+  // List.update({'person': d.person}, updateData, function(err, aff) {
+  //   if(err) {
+  //     return console.log(err);
+  //   }
+  //   console.log('affected rows %d', aff);
+  //   res.send("Update Successful");
+  // });
+  res.send("Got");
+});
+// ----- END SHOPPING LIST
 
 // ----- TRACKER -----
 /* ----- Load tracker page ----- */
@@ -226,6 +310,13 @@ app.get('/iid', function(req, res) {
 //     console.log("error");
 //     console.log(err);
 //     return;
+//   }
+//   console.log(results);
+// });
+// List.find({}, function(err, results) {
+//   if(err) {
+//     console.log("error");
+//     return console.log(err);;
 //   }
 //   console.log(results);
 // });

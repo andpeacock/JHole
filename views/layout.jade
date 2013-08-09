@@ -11,8 +11,9 @@ html
   body
     div.gc
       nav#mainNav
-        a(href='/tracker', class='btn btn-primary') Tracker
-        a(href='/history', class='btn btn-primary') Loot History
+        a(href='/history', class='btn btn-primary') Loot
+        block nav
+        a(href='/shopping', class='btn btn-primary') Shopping
       block content
 
       footer= ver

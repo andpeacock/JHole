@@ -1,5 +1,21 @@
 extends layout
 
+mixin personTile(d)
+  div.person-tile
+    h3 #{d.person}
+    if d.items.length > 0
+      ul.itemList.list-unstyled
+        for it in d.items
+          li #{it.item}
+            input(type='text', class='form-control itemCost')
+            button(type='button', class='btn btn-small btn-default boughtToggle', data-bought='false')
+      button(type='button', class='edit btn btn-small btn-warning') Edit
+        i.icon-pencil.icon-white
+    else
+      button(type='button', class='addItem btn btn-small btn-success') Add Item
+
 block content
   div.container
-    p Hello
+    for d, i in data
+      +personTile(d)
+  script(src='/js/listjs.js')
