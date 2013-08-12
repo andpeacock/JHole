@@ -390,6 +390,17 @@ for(var i = 0; i < memberList.length; i++) {
   });
 }
 */
+/*
+ * Gas DB reset
+Gas.find({}, function(err, results) {
+  if (err) {
+    return console.log(err);
+  }
+  for(var i = 0; i < results.length; i++) {
+    results[i].remove();
+  } 
+});
+*/
 // ----- END Setup loops -----
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -1,8 +1,8 @@
 $(document).ready(function() {
   var gas = {
-    c320: 2,
-    c540: 1,
-    t3val: 100,
+    c320: 85000,
+    c540: 60000,
+    t3val: 320000000,
     init: function() {
       this.calc();
       this.initbind();
@@ -24,6 +24,7 @@ $(document).ready(function() {
       });
     },
     dybind: function() {
+      var self = this;
       // .submitNums binding
       $('#gas').on('click', 'tbody tr.addAmounts button.submitNums', function() {
         /* Gas Schema
@@ -47,6 +48,7 @@ $(document).ready(function() {
           prow.find('td.c320').text(x.c320);
           prow.find('td.c540').text(x.c540);
           prow.find('td.other').text(x.other);
+          self.inicalc();
           h.parent().parent().remove();
         });
       });
@@ -66,9 +68,9 @@ $(document).ready(function() {
     calc: function() {
       var self = this;
       $('#gas tbody tr').each(function() {
-        var total = (parseInt($(this).find('td.c320')) * self.c320) + (parseInt($(this).find('td.c540')) * self.c540) + parseInt($(this).find('td.other'));
-        if((total/self.t3val) > 0) {
-          $(this).find('td.redeem').text((total/self.t3val) - parseInt($(this).find('td.redeemed').text()));
+        var total = (parseInt($(this).find('td.c320').text())*self.c320) + (parseInt($(this).find('td.c540').text())*self.c540) + parseInt($(this).find('td.other').text());
+        if((Math.floor(total/self.t3val)) > 0) {
+          $(this).find('td.redeem').text((Math.floor(total/self.t3val)) - parseInt($(this).find('td.redeemed').text()));
         }
         else {
           $(this).find('td.redeem').text('nope');
