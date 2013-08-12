@@ -233,10 +233,26 @@ app.get('/gas', function(req, res) {
       return console.log(err);
     }
     res.render('gas', {
-      title: 'JHole',
+      title: 'JHole - Gas Tracker',
       ver: ver,
       data: results
     });
+  });
+});
+app.post('/gas', function(req, res) {
+  var d = req.body;
+  var updateData = {
+    c320: d.c320,
+    c540: d.c540,
+    other: d.other,
+    redeemed: d.redeemed
+  };
+  Gas.update({person: d.person}, updateData, function(err, aff) {
+    if(err) {
+      return console.log(err);
+    }
+    console.log('affected rows %d', aff);
+    res.send('Update Successful');
   });
 });
 // ----- END GAS TRACKER -----

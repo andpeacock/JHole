@@ -39,9 +39,6 @@ $(document).ready(function() {
         self.ivals();
       });
       $('input#totalRVal').on('keyup', self.totalPer);
-      // $('td.imp').find('button.import').bind('click', function() {
-      //   self.imp($(this));
-      // });
       $('div.gc').on('click', 'td.imp button.import', function() {
         self.imp($(this));
       });
@@ -52,13 +49,13 @@ $(document).ready(function() {
     },
     totalPer: function() {
       var per = parseInt($(this).val()) / parseInt($(this).parent().siblings('.globalTotal').text());
-      $(this).parent().siblings('.globalPer').text(Math.round(per*100));
-      console.log(per);
+      var h = Math.floor(per*100);
+      $(this).parent().siblings('.globalPer').text(Math.floor(per*100));
       //realVal / estVal
       $('#payouts tbody tr').each(function(i) {
         if($(this).find('td.paid').data('paid') !== true && $(this).find('td.paid').data('excl') !== true) {
-          $(this).find('td.ftotal').text(Math.round((parseInt($(this).find('td.estTotal').text()) * per)));
-          $(this).find('td.perc').text(Math.round((parseInt($(this).find('td.ftotal').text()) / parseInt($(this).find('td.estTotal').text()))*100));
+          $(this).find('td.ftotal').text(Math.floor((parseInt($(this).find('td.estTotal').text()) * per)));
+          $(this).find('td.perc').text(Math.floor((parseInt($(this).find('td.ftotal').text()) / parseInt($(this).find('td.estTotal').text()))*100));
         }
         else {
 
@@ -71,7 +68,7 @@ $(document).ready(function() {
       $('#payouts tbody tr').each(function(i) {
         ft = parseInt($(this).find('td.ftotal').text());
         if(ft) {
-          $(this).find('td.perc').text(Math.round((ft/parseInt($(this).find('td.estTotal').text()))*100));
+          $(this).find('td.perc').text(Math.floor((ft/parseInt($(this).find('td.estTotal').text()))*100));
         }
       });
     },
@@ -115,14 +112,14 @@ $(document).ready(function() {
         });
       }
       function ib() {
-        var num = self.currg;
-        $('.i'+num).find('input').bind('keyup', function() {
-          $('.g'+num).find('.totalEst').text($(this).val());
-          self.countUpdate('m'+num);
+        var numi = self.currg;
+        $('.i'+numi).find('input').bind('keyup', function() {
+          $('.g'+numi).find('.totalEst').text($(this).val());
+          self.countUpdate('m'+numi);
         });
       }
-      function del(num, self) {
-        $('*[class$="'+num+'"]').remove();
+      function del(numb, self) {
+        $('*[class$="'+numb+'"]').remove();
         self.countUpdate('m'+self.currg);
       }
       function keygen() {
@@ -141,18 +138,18 @@ $(document).ready(function() {
         return str;
       }
       function ext (self) {
-        var num = self.currg;
+        var nume = self.currg;
         $('#main').find('tbody tr:not(#del)').each(function() {
-          $('<td class="m'+num+'"><button type="button" class="btn"></button</td>').appendTo($(this));
+          $('<td class="m'+nume+'"><button type="button" class="btn"></button</td>').appendTo($(this));
         });
-        $('tr#del').append('<td class="d'+num+'"><button type="button" class="btn btn-danger"></button></td>');
-        $('td.d'+num).bind('click', function() {
+        $('tr#del').append('<td class="d'+nume+'"><button type="button" class="btn btn-danger"></button></td>');
+        $('td.d'+nume).bind('click', function() {
           del($(this).attr('class').match(/\d+/)[0], self);
         });
-        $('#main').find('thead tr').append('<td class="i'+num+'"><input type="text" class="form-control" /></td>');
-        $('#groups').find('tbody').append('<tr class="g'+num+'"><td class="gNum">'+num+'</td><td class="totalEst">0</td><td class="numPeople">0</td><td class="perTotal">0</td></tr>');
+        $('#main').find('thead tr').append('<td class="i'+nume+'"><input type="text" class="form-control" /></td>');
+        $('#groups').find('tbody').append('<tr class="g'+nume+'"><td class="gNum">'+nume+'</td><td class="totalEst">0</td><td class="numPeople">0</td><td class="perTotal">0</td></tr>');
         function extbtnBind() {
-          $('td.m'+num).each(function() {
+          $('td.m'+nume).each(function() {
             $(this).find('button').bind('click', function() {
               ($(this).hasClass('btn-success')) ? $(this).removeClass('btn-success') : $(this).addClass('btn-success');
               self.countUpdate($(this).parent().attr('class'));
@@ -164,7 +161,6 @@ $(document).ready(function() {
       }
       function bindings () {
         $('tr#del').find('td').bind('click', function() {
-          console.log(self);
           del(($(this).attr('class').match(/\d+/)[0]), self);
         });
         $('.vReal').find('input').bind('keyup', function() {
@@ -198,6 +194,7 @@ $(document).ready(function() {
               "split": $(this).find('td.perTotal').text()
             };
           });
+          console.log(expObj.groups);
           $('#main tbody tr:not(#del)').each(function() {
             var arr = [];
             $(this).find('td:not(.mname, .payout)').each(function() {
@@ -220,6 +217,7 @@ $(document).ready(function() {
                 self.countUpdate('m'+z);
               }
               self.calcs();
+              self.ivals();
               h.parent().parent().slideUp(function() {
                 h.remove();
               });
@@ -240,7 +238,6 @@ $(document).ready(function() {
       console.log("imp called");
       var self = this;
       var x = t.parent().siblings('td.iid').text();
-      console.log(x.length)
       if(x.length < 5) {
         alert("Please enter full id");
       }
@@ -258,10 +255,9 @@ $(document).ready(function() {
         ($('#hload').length) ? $('#hload').remove() : null;
         var par = t.parent(); //td
         var ptr = par.parent(); //tr
-        var rr = '<div id="hload"><h1 id="iid">'+x+'</h1><button id="chl" class="btn btn-danger">Close</button><button id="delEntry" class="btn btn-danger">Delete Entry</button><div class="loadGroups"></div><div class="loadVals"></div><div class="loadMain"></div></div>';
+        var rr = '<div id="hload"><h1 id="iid">'+x+'</h1><button id="chl" class="btn btn-danger">Close</button><button id="tiSave" class="btn btn-info">Save</button><button id="delEntry" class="btn btn-danger">Delete Entry</button><div class="loadGroups"></div><div class="loadVals"></div><div class="loadMain"></div></div>';
 
         $(rr).appendTo($('.container'));
-        //$('tr.loadCont').text("testing");
         var gtmpl = '<table id="groups" class="table table-condensed"><thead><tr><td>Group Number</td><td>Total Estimate</td><td>Number of People</td><td>Split Per</td></tr></thead><tbody></tbody></table>';
         var mtmpl = '<table id="main" class="table table-striped table-hover table-bordered table-condensed"><thead><tr><td>Name</td><td class="gTotal">0</td></tr></thead><tbody></tbody></table>';
         function mtbl() {
@@ -294,15 +290,35 @@ $(document).ready(function() {
           var h = $(this);
           $.get('/trackerDelete', {'iid': x}, function(data) {
             $.get('/historyTable', function(data) {
-              console.log(data);
               $('#payouts tbody').empty().append(data);
+              self.ivals();
               h.parent().slideUp(function() {
                 h.remove();
               });
             });
           });
         });
-
+        $('#tiSave').bind('click', function() {
+          var th = $(this);
+          var x = {
+            'iid': th.siblings('h1#iid').text(),
+            'paid': true,
+            'realVal': th.siblings('div.loadVals').find('td.vReal input').val(),
+            'excl': false
+          };
+          $.post('/historyUpdate', x, function(data) {
+            // This line subtracts value of updated row from total real value
+            (par.siblings('td.paid').data('paid')) ? ($('#totalRVal').val()) ? $('#totalRVal').val(parseInt((parseInt($('#totalRVal').val()) - parseInt(par.siblings('td.ftotal').text())))) : null : null;
+            // Gets new table and renders it to body, then triggers recalculation
+            $.get('/historyTable', function(data) {
+              th.parent().slideUp(function() {
+                $(this).remove();
+              });
+              $('#payouts tbody').empty().append(data);
+              self.ivals();
+            });
+          });
+        });
         var pft = parseInt(par.siblings('td.ftotal').text());
         if(pft) {
           $('.vReal').html(pft);
@@ -333,9 +349,11 @@ $(document).ready(function() {
             }
           });
         });
-        for(var y = 0; y < self.expObj.currg; y++) {
+        for(var y = 0; y <= self.expObj.currg; y++) {
+          console.log("In this loop");
           var boo = false;
           $('#main tbody tr').each(function() {
+            console.log("In tr bit");
             if($(this).find('td.m'+y).find('button').hasClass('btn-success')) {
               boo = true;
             }
@@ -344,6 +362,7 @@ $(document).ready(function() {
             $('td.m'+y).remove();
             $('td.i'+y).remove();
           }
+          console.log(boo);
         }
         self.countUpdate('m'+self.expObj.currg);
         for(var z = 0; z <= self.expObj.currg; z++) {
@@ -367,13 +386,16 @@ $(document).ready(function() {
         }
       });
       $(n).find('.numPeople').text(count);
-      var pt = Math.round((parseInt($(n).find('.totalEst').text())/count)/1.1);
+      var pt = Math.floor((parseInt($(n).find('.totalEst').text())/count)/1.1);
+      pt = (isNaN(pt)) ? 0 : pt;
       $(n).find('.perTotal').text(($('.btn-success').length > 0) ? pt : 0);
       
       var te = 0;
       $('.totalEst').each(function() {
         te += parseInt($(this).text());
       });
+      te = (isNaN(te)) ? 0 : te;
+      console.log("te: "+te);
       $('td.gTotal, #vals td.vEst').text(te);
 
       $('.'+c).each(function() {
@@ -384,31 +406,34 @@ $(document).ready(function() {
       self.calcs();
     },
     calcs: function() {
-      var te = $('#vals td.vEst').text();
+      var te = parseInt($('#vals td.vEst').text());
       var vrv = 0;
       if($('.vReal input').length > 0) {
-        vrv = $('.vReal').find('input').val();
+        vrv = ($('.vReal').find('input').val()) ? $('.vReal').find('input').val() : 0;
+        console.log("vrv: "+vrv);
       }
       else {
         vrv = parseInt($('.vReal').text());
       }
       if(vrv) {
-        $('#vals tr td.vcTax').text(Math.round(parseInt(vrv)*0.1));
-        $('#vals tr td.vTotal').text(Math.round(parseInt(vrv)/1.1));
+        $('#vals tr td.vcTax').text(Math.floor(parseInt(vrv)*0.1));
+        $('#vals tr td.vTotal').text(Math.floor(parseInt(vrv)/1.1));
+        //$('#vals tr td.vTotal').text((parseInt(vrv) - Math.round(parseInt(vrv)*0.1)));
         var per = parseInt(vrv)/parseInt($('#vals td.vEst').text());
-        $('#vals tr td.vPer').text(Math.round(per*100));
+        $('#vals tr td.vPer').text(Math.floor(per*100));
         $('.perTotal').each(function() {
-          $(this).text(Math.round(((parseInt($(this).siblings('td.totalEst').text())/parseInt($(this).siblings('td.numPeople').text()))/1.1)*per));
+          $(this).text(Math.floor(((parseInt($(this).siblings('td.totalEst').text())/parseInt($(this).siblings('td.numPeople').text()))/1.1)*per));
         });
         $('#main tbody tr td[class^="m"]').each(function() {
           if($(this).find('button').hasClass('btn-success')) {
-            $(this).data('mnum', (parseInt($('tr.g'+$(this).attr('class').match(/\d+/)[0]).find('.perTotal').text())))
+            $(this).data('mnum', (parseInt($('tr.g'+$(this).attr('class').match(/\d+/)[0]).find('.perTotal').text())));
           }
         });
       }
       else {
-        $('#vals tr td.vcTax').text(Math.round(te*0.1));
-        $('#vals tr td.vTotal').text(Math.round(te/1.1));
+        $('#vals tr td.vcTax').text(Math.floor(te*0.1));
+        $('#vals tr td.vTotal').text(Math.floor(te/1.1));
+        //$('#vals tr td.vTotal').text((te - Math.round(te*0.1)));
       }
       $('#main tbody tr').each(function() {
         var h = 0;
@@ -417,7 +442,10 @@ $(document).ready(function() {
             h += $(this).data('mnum');
           }
         });
-        $(this).find('.payout').text(h);
+        if(isNaN(h)) {
+          h = 0;
+        }
+        $(this).find('.payout').text((isNaN(h)) ? 0 : h);
       });
     }
   };
