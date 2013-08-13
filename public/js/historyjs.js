@@ -194,7 +194,6 @@ $(document).ready(function() {
               "split": $(this).find('td.perTotal').text()
             };
           });
-          console.log(expObj.groups);
           $('#main tbody tr:not(#del)').each(function() {
             var arr = [];
             $(this).find('td:not(.mname, .payout)').each(function() {
@@ -235,7 +234,6 @@ $(document).ready(function() {
       });
     },
     imp: function(t) {
-      console.log("imp called");
       var self = this;
       var x = t.parent().siblings('td.iid').text();
       if(x.length < 5) {
@@ -245,7 +243,6 @@ $(document).ready(function() {
         $.get('/trackerDown', {'iid': x}, function(data) {
           var y = data[0];
           //self.currg = y.currg;
-          console.log(y);
           self.expObj = y;
           tmpl();
         });
@@ -350,10 +347,8 @@ $(document).ready(function() {
           });
         });
         for(var y = 0; y <= self.expObj.currg; y++) {
-          console.log("In this loop");
           var boo = false;
           $('#main tbody tr').each(function() {
-            console.log("In tr bit");
             if($(this).find('td.m'+y).find('button').hasClass('btn-success')) {
               boo = true;
             }
@@ -362,7 +357,6 @@ $(document).ready(function() {
             $('td.m'+y).remove();
             $('td.i'+y).remove();
           }
-          console.log(boo);
         }
         self.countUpdate('m'+self.expObj.currg);
         for(var z = 0; z <= self.expObj.currg; z++) {
@@ -395,7 +389,6 @@ $(document).ready(function() {
         te += parseInt($(this).text());
       });
       te = (isNaN(te)) ? 0 : te;
-      console.log("te: "+te);
       $('td.gTotal, #vals td.vEst').text(te);
 
       $('.'+c).each(function() {
@@ -410,7 +403,6 @@ $(document).ready(function() {
       var vrv = 0;
       if($('.vReal input').length > 0) {
         vrv = ($('.vReal').find('input').val()) ? $('.vReal').find('input').val() : 0;
-        console.log("vrv: "+vrv);
       }
       else {
         vrv = parseInt($('.vReal').text());

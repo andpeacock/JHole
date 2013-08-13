@@ -70,7 +70,7 @@ exports.remove = function(schemaName, findData, callback) {
   })
 };
 exports.create = function(schemaName, createData, callback) {
-  var sub = new dbModel.schemaName(createData);
+  var sub = new schemaName(createData);
   sub.save(function(err, sub) {
     if(err) {
       res.send(500, "That did not work so well");

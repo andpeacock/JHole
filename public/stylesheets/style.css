@@ -130,7 +130,6 @@ div#hload {
 
 /* ---------- SHOPPING LIST STYLES ---------- */
 .person-tile {
-  /*width: 218px; */
   width: 214px;
   min-height: 130px;
   padding: 0 15px 15px;
@@ -139,7 +138,6 @@ div#hload {
   -moz-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.54);
   box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.54);
   float: left;
-  /*display: inline-block;*/
   border-radius: 3px;
   position: relative;
 }
@@ -147,12 +145,6 @@ div#hload {
   width: 446px;
   min-height: 280px;
 }
-/*.person-tile:nth-child(5n + 1) {
-  margin-left: 0;
-}
-.person-tile:nth-child(5n) {
-  margin-right: 0;
-}*/
 .person-tile.finished {
   background: #aee3b4;
 }
@@ -188,12 +180,6 @@ div#hload {
 .person-tile button.remove:hover, .person-tile button.edit:hover {
   height: 26px;
 }
-/*.person-tile ul li span.num {
-  float: right;
-}
-.person-tile ul li a.deleteItem {
-  float: right;
-}*/
 .person-tile label {
   padding: 2px 0;
 }
@@ -220,37 +206,6 @@ div#hload {
 .person-tile input.numberEnter {
   width: 92px;
 }
-/*
-.person-tile button.edit {
-  text-align: left;
-}
-.person-tile button.edit i {
-  float: right;
-  margin-top: 2px;
-}
-label.complete input[type=checkbox] {
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-}
-div.totalInputCont {
-  width: 100%;
-  margin-bottom: 10px;
-}
-div.totalInputCont input {
-  width: 79px;
-}
-.addItemMenu {
-  -webkit-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.25);
-  -moz-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.25);
-  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.25);
-}
-.addItemMenu .addItemInput {
-  width:93px;
-}
-.addItemMenu .addItemNumInput {
-  width:70px;
-}*/
 input.itemCost {
   display: inline-block;
   width: 75px;
