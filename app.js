@@ -6,12 +6,17 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
+  , history = require('./routes/history')
+  , tracker = require('./routes/tracker')
+  , gas = require('./routes/gas')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
+  , gm = require('./models/general')
   , moment = require('moment');
 
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
+  , dbModel = require('./models/db');
 
 var app = express();
 
@@ -26,41 +31,10 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ----- SCHEMAS -----
-var lootTrackSchema = new mongoose.Schema({
-  iid: String,
-  currg: Number,
-  date: { type: Date, default: Date.now },
-  groups: mongoose.Schema.Types.Mixed,
-  main: mongoose.Schema.Types.Mixed,
-  realVal: Number,
-  paidOut: {type: Boolean, default: false},
-  excl: {type: Boolean, default: false}
-});
-var shoppingListSchema = new mongoose.Schema({
-  person: String,
-  items: [{
-    item: String,
-    quantity: Number,
-    buyer: {type: String, default: "none"},
-    cost: {type: Number, default: 0},
-    bought: {type: Boolean, default: false},
-    paid: {type: Boolean, default: false}
-  }]
-});
-var gasTrackSchema = new mongoose.Schema({
-  person: String,
-  c320: {type: Number, default: 0},
-  c540: {type: Number, default: 0},
-  other: {type: Number, default: 0},
-  redeemed: {type: Number, default: 0}
-});
-// ----- END SCHEMAS -----
-
 // ----- MODELS -----
-var Loot = mongoose.model('Loot', lootTrackSchema);
-var List = mongoose.model('List', shoppingListSchema);
-var Gas  = mongoose.model('Gas', gasTrackSchema);
+var Loot = dbModel.Loot;
+var List = dbModel.List;
+var Gas  = dbModel.Gas;
 // ----- END MODELS -----
 
 var cnct = false;
@@ -69,20 +43,9 @@ var memberList = ["Ageudum", "Akrim Stenra",  "Andrew Jester", "Brutus King", "C
                   "Joe Poopy", "Lilum Biggum", "Melliflous Hyperion", "Nova Kairas", "Schaeffer Gaunt",
                   "Silas Mieyli", "Simmons Hakoke", "Sinya Todako", "Tennigan Haldeye", "Yuri Lebbie",
                   "Zencron en Thelles", "807Y6DI897TU"];
-
-fs.readFile('package.json', 'utf8', function(err, data) {
-  if(err) {
-    return console.log(err);
-  }
-  ver = JSON.parse(data).version;
-});
-
-mongoose.connect('mongodb://localhost/test'); //local
-//mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback () {
-  cnct = true;
+dbModel.init();
+gm.getVer(function(version) {
+  ver = version;
 });
 
 // development only
@@ -100,94 +63,11 @@ app.get('/', function(req, res){
 });
 // ----- END INDEX -----
 
-// ----- PAYOUT -----
-// Page load
-app.get('/history', function(req, res) {
-  var d = [];
-  Loot.find({}, function(err, results) {
-    if(err) {
-      return console.log(err);
-    }
-    for(var i = 0; i < results.length; i++) {
-      var et = 0;
-      for (key in results[i].groups) {
-        et += parseInt(results[i].groups[key]['estTotal']);
-      }
-      d.push({
-        iid: results[i].iid,
-        date: moment(results[i].date).format("MM/DD"),
-        estTotal: et,
-        realVal: results[i].realVal,
-        paid: (results[i].paidOut) ? results[i].paidOut : false,
-        excl: (results[i].excl) ? results[i].excl : false
-      });
-    }
-    res.render('history', {
-      title: 'History',
-      data: d,
-      moment: moment,
-      ver: ver
-    });
-  });
-});
-
-// Update entry
-app.post('/historyUpdate', function(req, res) {
-  var d = req.body;
-  var updateData = {
-    paidOut: d.paid,
-    realVal: d.realVal,
-    excl: d.excl
-  };
-  Loot.update({'iid': d.iid}, updateData, function(err, aff) {
-    if(err) {
-      return console.log(err);
-    }
-    console.log('affected rows %d', aff);
-    res.send("Update Successful");
-  });
-});
-
-/* ----- PARTIAL RENDER CALLS ----- */
-// History table render
-app.get('/historyTable', function(req, res) {
-  var d = [];
-  Loot.find({}, function(err, results) {
-    if(err) {
-      return console.log(err);
-    }
-    for(var i = 0; i < results.length; i++) {
-      var et = 0;
-      for (key in results[i].groups) {
-        et += parseInt(results[i].groups[key]['estTotal']);
-      }
-      d.push({
-        iid: results[i].iid,
-        date: moment(results[i].date).format("MM/DD"),
-        estTotal: et,
-        realVal: results[i].realVal,
-        paid: (results[i].paidOut) ? results[i].paidOut : false,
-        excl: (results[i].excl) ? results[i].excl : false
-      });
-    }
-    app.render('_historytbody', { data: d }, function(err, html){
-      res.send(html);
-    });
-  });
-});
-
-// Tracker table render
-app.get('/trackerTable', function(req, res) {
-  app.render('_trackertable', {members: memberList}, function(err, html) {
-    if(err) {
-      return console.log(err);
-    }
-    res.send(html);
-  });
-});
-/* ----- END PARTIAL CALLS ----- */
-
-// ----- END PAYOUT -----
+// ----- HISTORY -----
+app.get('/history', history.index); // Initial redner
+app.get('/historyTable', history.render); // Partial table render
+app.post('/historyUpdate', history.update); // Update
+// ----- END HISTORY -----
 
 // ----- SHOPPING LIST -----
 app.get('/shopping', function(req, res){
@@ -227,119 +107,17 @@ app.post('/listUp', function(req, res) {
 // ----- END SHOPPING LIST
 
 // ----- GAS TRACKER -----
-app.get('/gas', function(req, res) {
-  Gas.find({}, function(err, results) {
-    if(err) {
-      return console.log(err);
-    }
-    res.render('gas', {
-      title: 'JHole - Gas Tracker',
-      ver: ver,
-      data: results
-    });
-  });
-});
-app.post('/gas', function(req, res) {
-  var d = req.body;
-  var updateData = {
-    c320: d.c320,
-    c540: d.c540,
-    other: d.other,
-    redeemed: d.redeemed
-  };
-  Gas.update({person: d.person}, updateData, function(err, aff) {
-    if(err) {
-      return console.log(err);
-    }
-    console.log('affected rows %d', aff);
-    res.send('Update Successful');
-  });
-});
+app.get('/gas', gas.index);
+app.post('/gas', gas.update);
 // ----- END GAS TRACKER -----
 
 // ----- TRACKER -----
-/* ----- Load tracker page ----- */
-app.get('/tracker', function(req, res) {
-  var arr = [];
-  Loot.find({}, function(err, results) {
-    if(err) {
-      console.log("error");
-      console.log(err);
-      return;
-    }
-    for(var i = 0; i < results.length; i++) {
-      arr.push({iid: results[i].iid, date: results[i].date});
-    }
-    res.render('tracker', {
-      title: 'Tracker',
-      data: arr,
-      moment: moment,
-      ver: ver
-    });
-  });
-});
-
-/* ----- Export data ----- */
-app.post('/trackerUp', function(req, res) {
-  console.log(req.body);
-  var d = req.body;
-  
-  var sub = new Loot({
-    iid: d.iid,
-    currg: d.currg,
-    groups: d.groups,
-    main: d.main,
-    realVal: d.vals.real
-  });
-  sub.save(function(err, sub) {
-    if(err) {
-      res.send(500, "That did not work so well");
-      return;
-    }
-    res.send("Complete");
-    return;
-  });
-});
-
-/* ----- Import data ----- */
-app.get('/trackerDown', function(req, res) {
-  Loot.find({'iid': req.query.iid}, function(err, results) {
-    if(err) {
-      console.log(err);
-      res.send("Error");
-      return;
-    }
-    res.send(results);
-    return;
-  });
-});
-
-/* ----- Delete entry ----- */
-app.get('/trackerDelete', function(req, res) {
-  console.log("Called");
-  Loot.remove({'iid': req.query.iid }, function(err) {
-    if (err) {
-      return console.log(err);
-    }
-    res.send("Success");
-    return;
-  });
-});
-
-/* ----- Send list for typeahead ----- */
-app.get('/iid', function(req, res) {
-  var hs = [];
-  Loot.find({}, function(err, results) {
-    if(err) {
-      return console.log(err);
-    }
-    for(var i = 0; i < results.length; i++) {
-      hs.push({value: results[i].iid, date: moment(results[i].date).format("MM/DD"), tokens:[results[i].iid, moment(results[i].date).format("MM/DD")]});
-    }
-    res.json(hs);
-    return;
-  });
-});
+app.get('/tracker', tracker.index);
+app.get('/trackerDown', tracker.entry);
+app.get('/trackerDelete', tracker.remove);
+app.get('/iid', tracker.typeahead);
+app.get('/trackerTable', tracker.render);
+app.post('/trackerUp', tracker.create);
 // ----- END TRACKER -----
 
 // ----- QUERY TEST -----
