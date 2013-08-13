@@ -1,0 +1,74 @@
+var dbModel = require('../models/db')
+  , gm = require('../models/general')
+  , moment = require('moment')
+  , ver;
+
+gm.getVer(function(version) {
+  ver = version;
+});
+
+var tabelRender = function(callback) {
+  var d = [];
+  function innc(results) {
+    for(var i = 0; i < results.length; i++) {
+      var et = 0;
+      for (key in results[i].groups) {
+        et += parseInt(results[i].groups[key]['estTotal']);
+      }
+      d.push({
+        iid: results[i].iid,
+        date: moment(results[i].date).format("MM/DD"),
+        estTotal: et,
+        realVal: results[i].realVal,
+        paid: (results[i].paidOut) ? results[i].paidOut : false,
+        excl: (results[i].excl) ? results[i].excl : false
+      });
+    }
+    callback(d);
+  }
+  dbModel.find(dbModel.Loot, {}, innc);
+};
+
+/*
+ * GET history data and table.
+ */
+
+exports.index = function(req, res) {
+  tabelRender(function (d) {
+    res.render('history', {
+      title: 'History',
+      data: d,
+      moment: moment,
+      ver: ver
+    });
+  });
+};
+
+/*
+ * GET history partial table.
+ */
+
+exports.render = function(req, res) {
+  tabelRender(function (d) {
+    req.app.render('_historytbody', { data: d }, function(err, html){
+      res.send(html);
+    });
+  });
+};
+
+/*
+ * POST history updated data.
+ */
+
+exports.update = function(req, res) {
+  var d = req.body;
+  var updateData = {
+    paidOut: d.paid,
+    realVal: d.realVal,
+    excl: d.excl
+  };
+  function callback() {
+    res.send("Update Successful");
+  }
+  dbModel.update(dbModel.Loot, {'iid': d.iid}, updateData, callback);
+};
