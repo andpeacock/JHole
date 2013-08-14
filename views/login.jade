@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 Login
+  p Testing login
+  form(action='/login', method='post')
+    label Username:
+    input(type='text', name='username')
+    label Password:
+    input(type='password', name='password')
+    input(type='submit', value='submit')

@@ -34,12 +34,15 @@ var tabelRender = function(callback) {
  */
 
 exports.index = function(req, res) {
+  console.log(req.user.admin);
   tabelRender(function (d) {
     res.render('history', {
       title: 'History',
       data: d,
       moment: moment,
-      ver: ver
+      ver: ver,
+      admin: true
+      //admin: req.user.admin
     });
   });
 };

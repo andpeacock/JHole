@@ -9,7 +9,10 @@
     "express": "3.2.6",
     "jade": "*",
     "mongoose": "3.6.15",
-    "moment": "2.1.0"
+    "moment": "2.1.0",
+    "bcrypt": "0.7.6",
+    "passport": "0.1.17",
+    "passport-local": "0.1.6"
   },
   "subdomain": "jhole",
   "engines": {

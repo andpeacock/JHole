@@ -1,0 +1,60 @@
+div#hload
+  h1 #{d.iid}
+  button#chl.btn.btn-danger Close
+  if(admin)
+    button#tiSave.btn.btn-info Save
+    button#delEntry.btn.btn-danger
+  table#groups.table.table-condensed
+    thead
+      tr
+        td Group Number
+        td Total Estimate
+        td Number of People
+        td Split Per
+    tbody
+      each g in d.groups
+        tr(class="g#{g.gnumber}")
+        tr(class="g")
+          td.gNum #{g.gnumber}
+          td.totalEst #{g.estTotal}
+          td.numPeople #{g.people}
+          td.perTotal #{g.split}
+  table#vals.table.table-condensed
+    thead
+      tr
+        td Real Value of Loot
+        td Estimated Value
+        td % of Estimated
+        td Total Cut
+        td Total After Cut
+    tbody
+      tr
+        td.vReal
+          if(d.realVal)
+            = d.realVal
+          else
+            input(type='text', class='form-control')
+        td.vEst 0
+        td.vPer percent
+        td.vcTax 0
+        td.vTotal 0
+  table#main.table.table-striped.table-hover.table-bordered.table-condensed
+    thead
+      tr
+        td Total
+        td.gTotal 0
+        for gg in d.groups
+          td(class="i#{gg.gnumber}")= gg.estTotal
+    tbody
+      each user, i in d.main
+        if(user.site) 
+          tr(class='test')
+            td.mname #{i}
+            td.payout 0
+            for s, j in user.site
+              if(user.site[j])
+                td(class='d#{s}')
+                  button(type='button', class='btn btn-success')
+              else
+                td
+                  button.btn

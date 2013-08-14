@@ -47,6 +47,7 @@ exports.render = function(req, res) {
 
 /*
  * POST new tracker entry.
+ * /trackerUp
  */
 
 exports.create = function(req, res) {
@@ -67,24 +68,33 @@ exports.create = function(req, res) {
 
 /*
  * GET single tracker entry.
+ * /trackerDown
  */
 
 exports.entry = function(req, res) {
   function callback(results) {
-    res.send(results);
+    //res.send(results);
+    console.log(results[0]);
+    req.app.render('_trackerentry', {d: results[0]}, function(err, html) {
+      if(err) {
+        return console.log(err);
+      }
+      res.send(html);
+    });
   }
   dbModel.find(dbModel.Loot, {'iid': req.query.iid}, callback);
 };
 
 /*
  * GET remove single tracker entry.
+ * /trackerDelete
  */
 
 exports.remove = function(req, res) {
   function callback() {
     res.send("Removed");
   }
-  dbModel.remove(dbModel.Loot, {'iid': req.query.iid }, callback);
+  dbModel.remove(dbModel.Loot, {'iid': req.query.iid}, callback);
 };
 
 /*
