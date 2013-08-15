@@ -240,52 +240,23 @@ var history = {
     }
     else {
       $.get('/trackerDown', {'iid': x}, function(data) {
-        // var y = data[0];
-        // console.log(y);
-        // //self.currg = y.currg;
-        // self.expObj = y;
-        // tmpl();
-        //TEST
-        $(data).appendTo($('.container'));
+        ($('#hload').length) ? $('#hload').remove() : null;
+        $(data.html).appendTo($('.container'));
         $('#hload').slideDown();
-        //END TEST
+        tmpl(data.data);
       });
     }
-    function tmpl() {
-      //START INITMPL
-      ($('#hload').length) ? $('#hload').remove() : null;
-      var par = t.parent(); //td
-      var ptr = par.parent(); //tr
-      var rr = '<div id="hload"><h1 id="iid">'+x+'</h1><button id="chl" class="btn btn-danger">Close</button><button id="tiSave" class="btn btn-info">Save</button><button id="delEntry" class="btn btn-danger">Delete Entry</button><div class="loadGroups"></div><div class="loadVals"></div><div class="loadMain"></div></div>';
-
-      $(rr).appendTo($('.container'));
-      var gtmpl = '<table id="groups" class="table table-condensed"><thead><tr><td>Group Number</td><td>Total Estimate</td><td>Number of People</td><td>Split Per</td></tr></thead><tbody></tbody></table>';
-      var mtmpl = '<table id="main" class="table table-striped table-hover table-bordered table-condensed"><thead><tr><td>Name</td><td class="gTotal">0</td></tr></thead><tbody></tbody></table>';
-      function mtbl() {
-        var members = ["Ageudum", "Akrim Stenra",  "Andrew Jester", "Brutus King", "Cardavet", "Joe Poopy", "Lilum Biggum", "Melliflous Hyperion", "Nova Kairas", "Schaeffer Gaunt", "Silas Mieyli", "Simmons Hakoke", "Sinya Todako", "Tennigan Haldeye", "Yuri Lebbie","Zencron en Thelles", "807Y6DI897TU"];
-        for(var i = 0; i < members.length; i++) {
-          var tmpl = '<tr id="'+i+'"><td class="mname">'+members[i]+'</td><td class="payout">0</td></tr>';
-          $(tmpl).appendTo($('#main').find('tbody'));
-        }
-      }
-      var vtmpl = '<table id="vals" class="table table-condensed"><thead><tr><td>Real Value of Loot</td><td>Estimated Value</td><td>% of Estimated</td><td>Total Cut</td><td>Total After Cut</td></tr></thead><tbody><tr><td class="vReal"><input type="text" class="form-control" /></td><td class="vEst">0</td><td class="vPer">percent</td><td class="vcTax">0</td><td class="vTotal">0</td></tr></tbody></table>';
-      $('.loadGroups').append(gtmpl);
-      $('.loadMain').append(mtmpl);
-      $('.loadVals').append(vtmpl);
-      //END INITMPL
-
-      $('.vReal').find('input').bind('keyup', function() {
-        self.countUpdate('m'+self.currg);
-      });
-
-      $('#hload').slideDown();
-      mtbl();
-      
+    function tmpl(expObj) {
       $('#chl').bind('click', function() {
         $(this).parent().slideUp(function() {
           $(this).remove();
         });
       });
+      $('.vReal').find('input').bind('keyup', function() {
+        self.countUpdate('m'+self.currg);
+      });
+
+      // ----- ADMIN FUNCTION -----
       $('#delEntry').bind('click', function() {
         var x = $('#iid').text();
         var h = $(this);
@@ -299,6 +270,7 @@ var history = {
           });
         });
       });
+      // ----- ADMIN FUNCTION -----
       $('#tiSave').bind('click', function() {
         var th = $(this);
         var x = {
@@ -309,7 +281,9 @@ var history = {
         };
         $.post('/historyUpdate', x, function(data) {
           // This line subtracts value of updated row from total real value
-          (par.siblings('td.paid').data('paid')) ? ($('#totalRVal').val()) ? $('#totalRVal').val(parseInt((parseInt($('#totalRVal').val()) - parseInt(par.siblings('td.ftotal').text())))) : null : null;
+          // Need to refactor this line to be useable outside of this scope
+          // par was = t.parent()
+          // (par.siblings('td.paid').data('paid')) ? ($('#totalRVal').val()) ? $('#totalRVal').val(parseInt((parseInt($('#totalRVal').val()) - parseInt(par.siblings('td.ftotal').text())))) : null : null;
           // Gets new table and renders it to body, then triggers recalculation
           $.get('/historyTable', function(data) {
             th.parent().slideUp(function() {
@@ -320,58 +294,13 @@ var history = {
           });
         });
       });
-      var pft = parseInt(par.siblings('td.ftotal').text());
-      if(pft) {
-        $('.vReal').html(pft);
-      }
-      
-      for(var i = 0; i <= self.expObj.currg; i++) {
-        $('#main').find('thead tr').append('<td class="i'+i+'"><p></p></td>');
-        $('#main').find('tbody tr:not(#del)').each(function() {
-          $('<td class="m'+i+'"><button type="button" class="btn"></button</td>').appendTo($(this));
-        });
-      }
-      //#groups template
-      $.each(self.expObj.groups, function() {
-        var h = $(this)[0];
-        $('#groups').find('tbody').append('<tr class="g'+h.gnumber+'"><td class="gNum">'+h.gnumber+'</td><td class="totalEst">'+h.estTotal+'</td><td class="numPeople">'+h.people+'</td><td class="perTotal">'+h.split+'</td></tr>');
-        $('#main').find('thead tr td.i'+h.gnumber).find('p').text(h.estTotal);
-      });
-      //#main template
-      $.each(self.expObj.main, function(key, val) {
-        $('#main tbody tr').each(function() {
-          if($(this).find('td.mname').text() === key) {
-            var x = $(this);
-            if(val.site) {
-              $.each(val.site, function(k, v) {
-                x.find('td.m'+v).find('button').addClass('btn-success');
-              });
-            }
-          }
-        });
-      });
-      for(var y = 0; y <= self.expObj.currg; y++) {
-        var boo = false;
-        $('#main tbody tr').each(function() {
-          if($(this).find('td.m'+y).find('button').hasClass('btn-success')) {
-            boo = true;
-          }
-        });
-        if(!boo) {
-          $('td.m'+y).remove();
-          $('td.i'+y).remove();
-        }
-      }
-      self.countUpdate('m'+self.expObj.currg);
-      for(var z = 0; z <= self.expObj.currg; z++) {
+      // ---- END -----
+
+      self.countUpdate('m'+expObj.currg);
+      for(var z = 0; z <= expObj.currg; z++) {
         self.countUpdate('m'+z);
       }
       self.calcs();
-      $('#main tbody tr').each(function() {
-        if(!parseInt($(this).find('td.payout').text())) {
-          $(this).remove();
-        }
-      });
     }
   },
   countUpdate: function(c) {

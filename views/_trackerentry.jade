@@ -1,9 +1,19 @@
+mixin userRow(user, i)
+  if(user.site) 
+    tr
+      td.mname= i
+      td.payout 0
+      each t, tt in d.groups
+        td(class='m#{t.gnumber}')
+          for s, j in user.site
+            if(user.site[j] == t.gnumber)
+              button(type='button', class='btn btn-success')
 div#hload
-  h1 #{d.iid}
+  h1= d.iid
   button#chl.btn.btn-danger Close
   if(admin)
     button#tiSave.btn.btn-info Save
-    button#delEntry.btn.btn-danger
+    button#delEntry.btn.btn-danger Delete Entry
   table#groups.table.table-condensed
     thead
       tr
@@ -14,11 +24,10 @@ div#hload
     tbody
       each g in d.groups
         tr(class="g#{g.gnumber}")
-        tr(class="g")
-          td.gNum #{g.gnumber}
-          td.totalEst #{g.estTotal}
-          td.numPeople #{g.people}
-          td.perTotal #{g.split}
+          td.gNum= g.gnumber
+          td.totalEst= g.estTotal
+          td.numPeople= g.people
+          td.perTotal= g.split
   table#vals.table.table-condensed
     thead
       tr
@@ -47,14 +56,4 @@ div#hload
           td(class="i#{gg.gnumber}")= gg.estTotal
     tbody
       each user, i in d.main
-        if(user.site) 
-          tr(class='test')
-            td.mname #{i}
-            td.payout 0
-            for s, j in user.site
-              if(user.site[j])
-                td(class='d#{s}')
-                  button(type='button', class='btn btn-success')
-              else
-                td
-                  button.btn
+        +userRow(user, i)

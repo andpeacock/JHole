@@ -79,7 +79,8 @@ exports.entry = function(req, res) {
       if(err) {
         return console.log(err);
       }
-      res.send(html);
+      console.log(html);
+      res.send({html: html, data: results[0]});
     });
   }
   dbModel.find(dbModel.Loot, {'iid': req.query.iid}, callback);
