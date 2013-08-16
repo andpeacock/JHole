@@ -26,7 +26,6 @@ exports.index = function(req, res) {
     });
   }
 };
-
 exports.updateEve = function(req, res) {
   function callback() {
     res.redirect('/me');
