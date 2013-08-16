@@ -1,11 +1,5 @@
 var dbModel = require('../models/db')
-  , gm = require('../models/general')
-  , moment = require('moment')
-  , ver;
-
-gm.getVer(function(version) {
-  ver = version;
-});
+  , moment = require('moment');
 
 var tabelRender = function(callback) {
   var d = [];
@@ -31,16 +25,15 @@ var tabelRender = function(callback) {
 
 /*
  * GET history data and table.
+ * /history
  */
 
 exports.index = function(req, res) {
-  console.log(req.user.admin);
+  console.log(req.user);
   tabelRender(function (d) {
     res.render('history', {
-      title: 'History',
       data: d,
       moment: moment,
-      ver: ver,
       admin: true
       //admin: req.user.admin
     });
@@ -49,6 +42,7 @@ exports.index = function(req, res) {
 
 /*
  * GET history partial table.
+ * /historyTable
  */
 
 exports.render = function(req, res) {
@@ -61,6 +55,7 @@ exports.render = function(req, res) {
 
 /*
  * POST history updated data.
+ * /historyUpdate
  */
 
 exports.update = function(req, res) {

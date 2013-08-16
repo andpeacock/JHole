@@ -19,7 +19,8 @@ var userSchema = mongoose.Schema({
   username: {type: String, required: true, unique: true},
   email: {type: String, required: true, unique: true},
   password: {type: String, required: true},
-  admin: {type: Boolean, default: false}
+  admin: {type: Boolean, default: false},
+  evename: {type: String, default: ''}
 });
 var lootTrackSchema = new mongoose.Schema({
   iid: String,
@@ -75,6 +76,8 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 // ----- MODELS -----
 var User = mongoose.model('User', userSchema);
+var Loot = mongoose.model('Loot', lootTrackSchema);
+exports.User = mongoose.model('User', userSchema);
 exports.Loot = mongoose.model('Loot', lootTrackSchema);
 exports.List = mongoose.model('List', lootTrackSchema);
 exports.Gas  = mongoose.model('Gas', gasTrackSchema);

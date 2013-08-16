@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  if(user.evename)
+    h1= user.evename
+    p Total amount owed: #{total}
+  else
+    form(action='/evename', method='post')
+      label Enter eve main character name:
+      input(type='text', name='evename')
+      button(type='submit') Submit

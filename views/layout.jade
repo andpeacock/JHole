@@ -13,8 +13,14 @@ html
       nav#mainNav
         a(href='/history', class='btn btn-primary') History
         block nav
-        //a(href='/shopping', class='btn btn-primary') Shopping
+        //- a(href='/shopping', class='btn btn-primary') Shopping
         a(href='/gas', class='btn btn-primary') Gas
+        if(user)
+          a(href='/me', class='btn btn-primary')= user.username
       block content
+
+      if(user)
+        if(user.admin)
+          script(src='/js/adminjs.js')
 
       footer= ver

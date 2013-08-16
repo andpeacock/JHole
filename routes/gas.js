@@ -1,17 +1,9 @@
 var dbModel = require('../models/db')
-  , gm = require('../models/general')
-  , moment = require('moment')
-  , ver;
-
-gm.getVer(function(version) {
-  ver = version;
-});
+  , moment = require('moment');
 
 exports.index = function(req, res) {
   function callback(results) {
     res.render('gas', {
-      title: 'JHole - Gas Tracker',
-      ver: ver,
       data: results
     });
   }

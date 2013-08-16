@@ -1,17 +1,11 @@
 var dbModel = require('../models/db')
-  , gm = require('../models/general')
-  , moment = require('moment')
-  , ver;
+  , moment = require('moment');
 
 var memberList = [
   "Ageudum", "Akrim Stenra",  "Andrew Jester", "Brutus King", "Cardavet",
   "Joe Poopy", "Lilum Biggum", "Melliflous Hyperion", "Nova Kairas", "Schaeffer Gaunt",
   "Silas Mieyli", "Simmons Hakoke", "Sinya Todako", "Tennigan Haldeye", "Yuri Lebbie",
   "Zencron en Thelles", "807Y6DI897TU"];
-gm.getVer(function(version) {
-  ver = version;
-});
-
 /*
  * GET tracker data and table.
  */
@@ -23,10 +17,8 @@ exports.index = function(req, res) {
       arr.push({iid: results[i].iid, date: results[i].date});
     }
     res.render('tracker', {
-      title: 'Tracker',
       data: arr,
-      moment: moment,
-      ver: ver
+      moment: moment
     });
   }
   dbModel.find(dbModel.Loot, {}, callback);
@@ -34,6 +26,7 @@ exports.index = function(req, res) {
 
 /*
  * GET tracker partial table.
+ * /trackerTable
  */
 
 exports.render = function(req, res) {
@@ -81,7 +74,7 @@ exports.entry = function(req, res) {
     for(m in results[0].main) {
       mem.push({key: m, vs: results[0].main[m]});
     }
-    req.app.render('_trackerentry', {gr: gr.reverse(), iid: results[0].iid, rv: results[0].realVal, mem: mem.reverse()}, function(err, html) {
+    req.app.render('_trackerentry', {gr: gr.reverse(), iid: results[0].iid, rv: results[0].realVal, mem: mem.reverse(), user: req.user}, function(err, html) {
       if(err) {
         return console.log(err);
       }

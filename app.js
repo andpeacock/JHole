@@ -12,10 +12,16 @@ var express = require('express')
   , tracker = require('./routes/tracker')
   , gas = require('./routes/gas')
   , list = require('./routes/list')
+  , user = require('./routes/user')
   , gm = require('./models/general')
   , dbModel = require('./models/db');
 
 var app = express();
+
+app.locals({
+  title: 'JHole',
+  ver: ver
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -31,6 +37,11 @@ app.use(express.session({ secret: 'testsecret' }));
 // persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(function(req, res, next){
+  res.locals.session = req.session;
+  res.locals.user = req.user;
+  next();
+});
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -48,10 +59,7 @@ if ('development' == app.get('env')) {
 
 // ----- INDEX -----
 app.get('/', ensureAuthenticated, function(req, res){
-  res.render('index', {
-    title: 'JHole',
-    ver: ver
-  });
+  res.render('index');
 });
 app.get('/login', function(req, res){
   console.log("req.user: "+req.user);
@@ -74,28 +82,33 @@ app.post('/login', function(req, res, next) {
 
 // ----- HISTORY -----
 app.get('/history', ensureAuthenticated, history.index); // Initial redner
-app.get('/historyTable', history.render); // Partial table render
-app.post('/historyUpdate', history.update); // Update
+app.get('/historyTable', ensureAuthenticated, history.render); // Partial table render
+app.post('/historyUpdate', ensureAuthenticated, history.update); // Update
 // ----- END HISTORY -----
 
 // ----- SHOPPING LIST -----
-app.get('/shopping', list.index);
-app.post('/listUp', list.update);
+// app.get('/shopping', list.index);
+// app.post('/listUp', list.update);
 // ----- END SHOPPING LIST
 
 // ----- GAS TRACKER -----
-app.get('/gas', gas.index);
-app.post('/gas', gas.update);
+app.get('/gas', ensureAuthenticated, gas.index);
+app.post('/gas', ensureAuthenticated, gas.update);
 // ----- END GAS TRACKER -----
 
 // ----- TRACKER -----
 //app.get('/tracker', tracker.index);
-app.get('/trackerDown', tracker.entry);
-app.get('/trackerDelete', tracker.remove);
-app.get('/iid', tracker.typeahead);
-app.get('/trackerTable', tracker.render);
-app.post('/trackerUp', tracker.create);
+app.get('/trackerDown', ensureAuthenticated, tracker.entry);
+app.get('/trackerDelete', ensureAuthenticated, tracker.remove);
+app.get('/iid', ensureAuthenticated, tracker.typeahead);
+app.get('/trackerTable', ensureAuthenticated, tracker.render);
+app.post('/trackerUp', ensureAuthenticated, tracker.create);
 // ----- END TRACKER -----
+
+// ----- USER PAGE -----
+app.get('/me', ensureAuthenticated, user.index);
+app.post('/evename', ensureAuthenticated, user.updateEve);
+// ----- END USER PAGE -----
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

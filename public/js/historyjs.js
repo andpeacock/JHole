@@ -255,47 +255,6 @@ var history = {
       $('.vReal').find('input').bind('keyup', function() {
         self.countUpdate('m'+self.currg);
       });
-
-      // ----- ADMIN FUNCTION -----
-      $('#delEntry').bind('click', function() {
-        var x = $('#iid').text();
-        var h = $(this);
-        $.get('/trackerDelete', {'iid': x}, function(data) {
-          $.get('/historyTable', function(data) {
-            $('#payouts tbody').empty().append(data);
-            self.ivals();
-            h.parent().slideUp(function() {
-              h.remove();
-            });
-          });
-        });
-      });
-      // ----- ADMIN FUNCTION -----
-      $('#tiSave').bind('click', function() {
-        var th = $(this);
-        var x = {
-          'iid': th.siblings('h1#iid').text(),
-          'paid': true,
-          'realVal': th.siblings('div.loadVals').find('td.vReal input').val(),
-          'excl': false
-        };
-        $.post('/historyUpdate', x, function(data) {
-          // This line subtracts value of updated row from total real value
-          // Need to refactor this line to be useable outside of this scope
-          // par was = t.parent()
-          // (par.siblings('td.paid').data('paid')) ? ($('#totalRVal').val()) ? $('#totalRVal').val(parseInt((parseInt($('#totalRVal').val()) - parseInt(par.siblings('td.ftotal').text())))) : null : null;
-          // Gets new table and renders it to body, then triggers recalculation
-          $.get('/historyTable', function(data) {
-            th.parent().slideUp(function() {
-              $(this).remove();
-            });
-            $('#payouts tbody').empty().append(data);
-            self.ivals();
-          });
-        });
-      });
-      // ---- END -----
-
       self.countUpdate('m'+expObj.currg);
       for(var z = 0; z <= expObj.currg; z++) {
         self.countUpdate('m'+z);

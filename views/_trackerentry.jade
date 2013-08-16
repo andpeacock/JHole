@@ -1,17 +1,17 @@
-mixin userRow(user, i)
-  if(user.vs.site) 
+mixin userRow(users, i)
+  if(users.vs.site) 
     tr
-      td.mname= user.key
+      td.mname= users.key
       td.payout 0
       for t, tt in gr
         td(class='m#{t.ot.gnumber}')
-          for s, j in user.vs.site
-            if(user.vs.site[j] == t.ot.gnumber)
+          for s, j in users.vs.site
+            if(users.vs.site[j] == t.ot.gnumber)
               button(type='button', class='btn btn-success')
 div#hload
   h1= iid
   button#chl.btn.btn-danger Close
-  if(admin)
+  if(user.admin)
     button#tiSave.btn.btn-info Save
     button#delEntry.btn.btn-danger Delete Entry
   table#groups.table.table-condensed
@@ -55,5 +55,5 @@ div#hload
         for gg in gr
           td(class="i#{gg.ot.gnumber}")= gg.ot.estTotal
     tbody
-      for user, i in mem
-        +userRow(user, i)
+      for users, i in mem
+        +userRow(users, i)

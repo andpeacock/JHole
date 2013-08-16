@@ -1,11 +1,5 @@
 var dbModel = require('../models/db')
-  , gm = require('../models/general')
-  , moment = require('moment')
-  , ver;
-
-gm.getVer(function(version) {
-  ver = version;
-});
+  , moment = require('moment');
 
 exports.index = function(req, res) {
   var owed = {};
@@ -18,8 +12,6 @@ exports.index = function(req, res) {
       }
     }
     res.render('shopping', {
-      title: 'JHole',
-      ver: ver,
       data: results
     });
   }
