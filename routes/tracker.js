@@ -73,13 +73,18 @@ exports.create = function(req, res) {
 
 exports.entry = function(req, res) {
   function callback(results) {
-    //res.send(results);
-    console.log(results[0]);
-    req.app.render('_trackerentry', {d: results[0]}, function(err, html) {
+    var gr = [];
+    var mem = [];
+    for(g in results[0].groups) {
+      gr.push({key: g, ot: results[0].groups[g]});
+    }
+    for(m in results[0].main) {
+      mem.push({key: m, vs: results[0].main[m]});
+    }
+    req.app.render('_trackerentry', {gr: gr.reverse(), iid: results[0].iid, rv: results[0].realVal, mem: mem.reverse()}, function(err, html) {
       if(err) {
         return console.log(err);
       }
-      console.log(html);
       res.send({html: html, data: results[0]});
     });
   }

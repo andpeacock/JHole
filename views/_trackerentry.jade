@@ -1,15 +1,15 @@
 mixin userRow(user, i)
-  if(user.site) 
+  if(user.vs.site) 
     tr
-      td.mname= i
+      td.mname= user.key
       td.payout 0
-      each t, tt in d.groups
-        td(class='m#{t.gnumber}')
-          for s, j in user.site
-            if(user.site[j] == t.gnumber)
+      for t, tt in gr
+        td(class='m#{t.ot.gnumber}')
+          for s, j in user.vs.site
+            if(user.vs.site[j] == t.ot.gnumber)
               button(type='button', class='btn btn-success')
 div#hload
-  h1= d.iid
+  h1= iid
   button#chl.btn.btn-danger Close
   if(admin)
     button#tiSave.btn.btn-info Save
@@ -22,12 +22,12 @@ div#hload
         td Number of People
         td Split Per
     tbody
-      each g in d.groups
-        tr(class="g#{g.gnumber}")
-          td.gNum= g.gnumber
-          td.totalEst= g.estTotal
-          td.numPeople= g.people
-          td.perTotal= g.split
+      for g in gr
+        tr(class="g#{g.ot.gnumber}")
+          td.gNum= g.ot.gnumber
+          td.totalEst= g.ot.estTotal
+          td.numPeople= g.ot.people
+          td.perTotal= g.ot.split
   table#vals.table.table-condensed
     thead
       tr
@@ -39,8 +39,8 @@ div#hload
     tbody
       tr
         td.vReal
-          if(d.realVal)
-            = d.realVal
+          if(rv)
+            = rv
           else
             input(type='text', class='form-control')
         td.vEst 0
@@ -52,8 +52,8 @@ div#hload
       tr
         td Total
         td.gTotal 0
-        for gg in d.groups
-          td(class="i#{gg.gnumber}")= gg.estTotal
+        for gg in gr
+          td(class="i#{gg.ot.gnumber}")= gg.ot.estTotal
     tbody
-      each user, i in d.main
+      for user, i in mem
         +userRow(user, i)

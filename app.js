@@ -89,7 +89,7 @@ app.post('/gas', gas.update);
 // ----- END GAS TRACKER -----
 
 // ----- TRACKER -----
-app.get('/tracker', tracker.index);
+//app.get('/tracker', tracker.index);
 app.get('/trackerDown', tracker.entry);
 app.get('/trackerDelete', tracker.remove);
 app.get('/iid', tracker.typeahead);
