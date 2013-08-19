@@ -28,6 +28,9 @@ div.gc {
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 }
+div.regcont {
+  display: none;
+}
 table tr td input {
   width: 40px;
 }

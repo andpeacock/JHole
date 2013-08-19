@@ -5,6 +5,7 @@
 var express = require('express')
   , http = require('http')
   , path = require('path')
+  , mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
   , passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
@@ -29,7 +30,14 @@ app.locals({
 });
 
 var registerPhrase = 'testing';
-dbModel.init();
+//dbModel.init();
+mongoose.connect('mongodb://localhost/test'); //local
+//mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  cnct = true;
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
