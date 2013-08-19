@@ -47,7 +47,8 @@ var history = {
     });
   },
   totalPer: function() {
-    var per = parseInt($(this).val()) / parseInt($(this).parent().siblings('.globalTotal').text());
+    var hp = parseInt($(this).val()) / parseInt($(this).parent().siblings('.globalTotal').text())
+    var per = (isNaN(hp)) ? 0 : hp;
     var h = Math.floor(per*100);
     $(this).parent().siblings('.globalPer').text(Math.floor(per*100));
     //realVal / estVal

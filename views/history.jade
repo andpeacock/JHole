@@ -1,5 +1,23 @@
 extends layout
 
+mixin disab(d)
+  if d.excl == true
+    td.paid(data-paid="false", data-excl="true")
+      button(disabled=!user.admin).btn.btn-default.loot-paid y
+      button(disabled=!user.admin).btn.btn-default.not-paid n
+      button(disabled=!user.admin).btn.btn-warning.loot-excl e
+  else
+    if d.paid == true
+      td.paid(data-paid="true", data-excl="false") 
+        button(disabled=!user.admin).btn.btn-success.loot-paid y
+        button(disabled=!user.admin).btn.btn-default.not-paid n
+        button(disabled=!user.admin).btn.btn-default.loot-excl e
+    else
+      td.paid(data-paid="false", data-excl="false")
+        button(disabled=!user.admin).btn.btn-default.loot-paid y 
+        button(disabled=!user.admin).btn.btn-danger.not-paid n
+        button(disabled=!user.admin).btn.btn-default.loot-excl e
+
 block nav
   a(href='/tracker', class='btn btn-success', id='trackerStart') Tracker
 
@@ -36,23 +54,24 @@ block content
             td.imp
               button.import.btn.btn-primary Load
             td.updt
-              button.updt.btn.btn-warning Update
-            if d.excl == true
-              td.paid(data-paid="false", data-excl="true")
-                button.btn.btn-default.loot-paid y
-                button.btn.btn-default.not-paid n
-                button.btn.btn-warning.loot-excl e
-            else
-              if d.paid == true
-                td.paid(data-paid="true", data-excl="false") 
-                  button.btn.btn-success.loot-paid y
-                  button.btn.btn-default.not-paid n
-                  button.btn.btn-default.loot-excl e
-              else
-                td.paid(data-paid="false", data-excl="false")
-                  button.btn.btn-default.loot-paid y 
-                  button.btn.btn-danger.not-paid n
-                  button.btn.btn-default.loot-excl e 
+              button(disabled=!user.admin).updt.btn.btn-warning Update
+            +disab(d)
+            //- if d.excl == true
+            //-   td.paid(data-paid="false", data-excl="true")
+            //-     button.btn.btn-default.loot-paid y
+            //-     button.btn.btn-default.not-paid n
+            //-     button.btn.btn-warning.loot-excl e
+            //- else
+            //-   if d.paid == true
+            //-     td.paid(data-paid="true", data-excl="false") 
+            //-       button.btn.btn-success.loot-paid y
+            //-       button.btn.btn-default.not-paid n
+            //-       button.btn.btn-default.loot-excl e
+            //-   else
+            //-     td.paid(data-paid="false", data-excl="false")
+            //-       button.btn.btn-default.loot-paid y 
+            //-       button.btn.btn-danger.not-paid n
+            //-       button.btn.btn-default.loot-excl e 
             td.estTotal #{d.estTotal}
             td.ftotal #{d.realVal}
             td.perc percent

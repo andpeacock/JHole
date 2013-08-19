@@ -33,9 +33,7 @@ exports.index = function(req, res) {
   tabelRender(function (d) {
     res.render('history', {
       data: d,
-      moment: moment,
-      admin: true
-      //admin: req.user.admin
+      moment: moment
     });
   });
 };
@@ -68,5 +66,11 @@ exports.update = function(req, res) {
   function callback() {
     res.send("Update Successful");
   }
-  dbModel.update(dbModel.Loot, {'iid': d.iid}, updateData, callback);
+  if(req.user.admin) {
+    console.log("User is admin");
+    dbModel.update(dbModel.Loot, {'iid': d.iid}, updateData, callback);
+  }
+  else {
+    res.send("User is not an admin");
+  }
 };

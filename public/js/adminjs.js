@@ -1,6 +1,7 @@
 var admin = {
   init: function() {
     this.historyFunctions();
+    this.adminFunctions();
   },
   historyFunctions: function() {
     $('div.gc').on('click', '#delEntry', function() {
@@ -10,8 +11,8 @@ var admin = {
         $.get('/historyTable', function(data) {
           $('#payouts tbody').empty().append(data);
           history.ivals();
-          $(this).parent().slideUp(function() {
-            $(this).remove();
+          h.parent().slideUp(function() {
+            h.remove();
           });
         });
       });
@@ -42,6 +43,11 @@ var admin = {
           history.ivals();
         });
       });
+    });
+  },
+  adminFunctions: function() {
+    $('div.gc').on('click', '.adminUserDel', function() {
+      //call to delete user
     });
   }
 };

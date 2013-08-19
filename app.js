@@ -18,10 +18,18 @@ var express = require('express')
 
 var app = express();
 
+var ver;
+gm.getVer(function(version) {
+  ver = version;
+});
+
 app.locals({
   title: 'JHole',
   ver: ver
 });
+
+var registerPhrase = 'testing';
+dbModel.init();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -45,24 +53,21 @@ app.use(function(req, res, next){
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-dbModel.init();
-
-var ver;
-gm.getVer(function(version) {
-  ver = version;
-});
-
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
 
 // ----- INDEX -----
 app.get('/', ensureAuthenticated, function(req, res){
   res.render('index');
 });
 app.get('/login', function(req, res){
-  console.log("req.user: "+req.user);
+  //console.log("req.user: "+req.user);
   res.render('login', { user: req.user, message: req.session.messages });
 });
 app.post('/login', function(req, res, next) {
@@ -78,6 +83,25 @@ app.post('/login', function(req, res, next) {
     });
   })(req, res, next);
 });
+app.post('/register', function(req, res) {
+  var rb = req.body
+  var infoHold = {
+    username: rb.username,
+    email: rb.email,
+    password: rb.password,
+    evename: rb.evename
+  }
+  function callback() {
+    res.redirect("/me");
+  }
+  if(req.body.phrase === registerPhrase) {
+    dbModel.create(dbModel.User, infoHold, callback);
+  }
+});
+app.post('/registerPhrase', function(req, res) {
+  registerPhrase = req.body.updatePhrase;
+  res.send("Complete");
+});
 // ----- END INDEX -----
 
 // ----- HISTORY -----
@@ -92,8 +116,8 @@ app.post('/historyUpdate', ensureAuthenticated, history.update); // Update
 // ----- END SHOPPING LIST
 
 // ----- GAS TRACKER -----
-app.get('/gas', ensureAuthenticated, gas.index);
-app.post('/gas', ensureAuthenticated, gas.update);
+// app.get('/gas', ensureAuthenticated, gas.index);
+// app.post('/gas', ensureAuthenticated, gas.update);
 // ----- END GAS TRACKER -----
 
 // ----- TRACKER -----
@@ -147,6 +171,6 @@ Gas.find({}, function(err, results) {
 */
 // ----- END Setup loops -----
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+// http.createServer(app).listen(app.get('port'), function(){
+//   console.log('Express server listening on port ' + app.get('port'));
+// });
