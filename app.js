@@ -31,8 +31,8 @@ app.locals({
 
 var registerPhrase = 'testing';
 //dbModel.init();
-mongoose.connect('mongodb://localhost/test'); //local
-//mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
+//mongoose.connect('mongodb://localhost/test'); //local
+mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
@@ -87,7 +87,7 @@ app.post('/login', function(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
-      return res.redirect('/');
+      return res.redirect('/me');
     });
   })(req, res, next);
 });

@@ -3,7 +3,7 @@ extends layout
 block content
   if(user.evename)
     h1= user.evename
-    p Total amount owed: #{total}
+    p Estimate total amount owed: #{total}
   else
     form(action='/evename', method='post')
       label Enter eve main character name:
