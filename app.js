@@ -19,14 +19,11 @@ var express = require('express')
 
 var app = express();
 
-var ver;
 gm.getVer(function(version) {
-  ver = version;
-});
-
-app.locals({
-  title: 'JHole',
-  ver: ver
+  app.locals({
+    title: 'JHole',
+    ver: version
+  });
 });
 
 var registerPhrase = 'testing';
