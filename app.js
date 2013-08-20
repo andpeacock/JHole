@@ -1,7 +1,7 @@
 /**
  * Module dependencies.
  */
-// quick test
+
 var express = require('express')
   , http = require('http')
   , path = require('path')
@@ -27,9 +27,8 @@ gm.getVer(function(version) {
 });
 
 var registerPhrase = 'testing';
-//dbModel.init();
-//mongoose.connect('mongodb://localhost/test'); //local
-mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
+mongoose.connect('mongodb://localhost/test'); //local
+//mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
@@ -105,7 +104,7 @@ app.post('/register', function(req, res) {
 });
 app.post('/registerPhrase', function(req, res) {
   registerPhrase = req.body.updatePhrase;
-  res.send("Complete");
+  res.redirect('/me');
 });
 // ----- END INDEX -----
 
@@ -136,6 +135,8 @@ app.post('/trackerUp', ensureAuthenticated, tracker.create);
 
 // ----- USER PAGE -----
 app.get('/me', ensureAuthenticated, user.index);
+app.post('/editUser', ensureAuthenticated, user.editUser);
+app.post('/removeUser', ensureAuthenticated, user.removeUser);
 app.post('/evename', ensureAuthenticated, user.updateEve);
 // ----- END USER PAGE -----
 

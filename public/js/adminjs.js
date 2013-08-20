@@ -46,8 +46,50 @@ var admin = {
     });
   },
   adminFunctions: function() {
+    $('div.gc').on('submit', '.phraseForm', function() {
+      alert("Phrase updated to: "+$(this).find('input').val());
+    });
     $('div.gc').on('click', '.adminUserDel', function() {
-      //call to delete user
+      console.log($(this).parent().siblings('td.user').text());
+      var hold = $(this).parent().siblings('td.user').text();
+      $.post('/removeUser', {username: hold}, function(data) {
+        alert("Success");
+      });
+    });
+    $('div.gc').on('click', '.adminUserEdit', function() {
+      console.log("clicked");
+      var tp = $(this).parent();
+      tp.parent().find('td:not(.delCont, .editCont, .status)').each(function() {
+        $(this).data('hold', $(this).text());
+        $(this).html('<input type="text" class="form-control" placeholder="'+$(this).text()+'" />');
+      });
+      $('<button type="button" class="btn btn-success adminUserEditSubmit">Submit</button><button type="button" class="btn btn-default adminUserEditCancel">Cancel</button>').insertAfter($(this));
+      $(this).remove();
+    });
+    $('div.gc').on('click', '.adminUserEditSubmit', function() {
+      var tp = $(this).parent();
+      function dataa(sel) {
+        var h = tp.siblings('td.'+sel);
+        return (h.find('input').val()) ? h.find('input').val() : h.data('hold');
+      }
+      console.log(tp.siblings('td.user').data('hold'));
+      var dhold = {
+        inituser: tp.siblings('td.user').data('hold'),
+        username: dataa('user'),
+        email: dataa('email'),
+        evename: dataa('evename')
+      };
+      $.post('/editUser', dhold, function(data) {
+        tp.siblings('td.user').text(dhold.username).siblings('td.email').text(dhold.email).siblings('td.evename').text(dhold.evename);
+        tp.empty().append('<button type="button" class="btn btn-warning adminUserEdit">Edit</button>');
+      });
+    });
+    $('div.gc').on('click', '.adminUserEditCancel', function() {
+      var tp = $(this).parent();
+      tp.parent().find('td:not(.delCont, .editCont, .status)').each(function() {
+        $(this).text($(this).data('hold'));
+      });
+      tp.empty().append('<button type="button" class="btn btn-warning adminUserEdit">Edit</button>');
     });
   }
 };
