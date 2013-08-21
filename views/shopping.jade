@@ -1,21 +1,31 @@
 extends layout
 
-mixin personTile(d)
-  div.person-tile
-    h3 #{d.person}
-    if d.items.length > 0
-      ul.itemList.list-unstyled
+mixin personTile(d, act)
+  h3 #{d.person}
+  div(class=(act) ? 'active' : '').person-tile
+    ul.itemList.list-unstyled
+      if d.items.length > 0
         for it in d.items
-          li #{it.item}
-            input(type='text', class='form-control itemCost')
-            button(type='button', class='btn btn-small btn-default boughtToggle', data-bought='false')
-      button(type='button', class='edit btn btn-small btn-warning') Edit
-        i.icon-pencil.icon-white
-    else
-      button(type='button', class='addItem btn btn-small btn-success') Add Item
+          li
+            span.item= it.item
+            span.quant= it.quantity
+            if(act)
+              button(type='button', class='btn btn-small btn-danger deleteItem') X
+            else
+              button(type='button', class='btn btn-small btn-default boughtToggle', data-bought='false')
+      else
+        p No Items
 
 block content
   div.container
-    for d, i in data
-      +personTile(d)
+    div.listHold
+      div.addItem
+        input(type='text', name='addItemInput', class='form-control', placeholder='Add item name here', id='addItemInput')
+        input(type='number', name='addQuantInput', class='form-control', placeholder='Add item quantity here', id='addQuantInput')
+        button(type='button', class='btn btn-small btn-success addItemButton') +
+      for d, i in data
+        if(d.person == user.evename)
+          +personTile(d, true)
+        else
+          +personTile(d, false)
   script(src='/js/listjs.js')

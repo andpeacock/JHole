@@ -1,89 +1,49 @@
 var list = {
+  person: $('div.active').prev('h3').text(),
   init: function() {
     this.binding();
-    this.addItemBinding();
+    console.log(this.person);
   },
   binding: function() {
-    var self = this;
-    $('.person-tile').on('click', '.addItem', function() {
-      self.addItem($(this));
-    });
-    $('.person-tile').on('click', '.boughtToggle', function() {
-      ($(this).data('bought')) ? $(this).removeClass('btn-success').addClass('btn-default').data('bought', false) : $(this).removeClass('btn-default').addClass('btn-success').data('bought', true);
-      if($(this).siblings('input.itemCost').val()) {
-        //Check if it has a value and bought is true, need to then slide down menu to figure out buyer
-      }
-    });
-  },
-  addItemBinding: function() {
-    var self = this;
-    var p = $('.person-tile');
-    p.on('click', '.submitItem', function() {
-      var par = $(this).parent().parent('.person-tile');
-      var tmpl = '<li data-new=true><span class="litem">'+$(this).siblings('.itemEnter').val()+'</span><span class="lnum">'+$(this).siblings('.numberEnter').val()+'</span></li>';
-      var ultmpl = '<ul class="itemList list-unstyled"></ul>';
-      (par.find('ul.itemList').length) ? $(tmpl).appendTo(par.find('ul.itemList')) : $(ultmpl).insertAfter(par.find('h3')).append(tmpl);
-      $(this).siblings('.numberEnter, .itemEnter').val('');
-    });
-    p.on('click', '.update', function() {
-      var par = $(this).parent('.person-tile');
-      var x = {
-        person: par.find('h3').text(),
-        arr: []
-      };
-      par.find('ul.itemList li').each(function() {
-        if($(this).data('new')) {
-          x.arr.push({'item': $(this).find('.litem').text(), 'quantity': $(this).find('.lnum').text()});
-          $(this).data('new', false);
-          $(this).append('<input type="text" class="form-control itemCost" /><button type="button" class="btn btn-small btn-default boughtToggle" data-bought=false></button>');
-          console.log($(this).data());
-        }
-      });
-      console.log(x.arr);
-      if(x.arr.length) {
-        // $.post('/listUp', x, function(data) {
-        //   console.log(data);
-        // });
-      }
-      closeState(par);
-    });
-    p.on('click', '.cancel', function() {
-      var par = $(this).parent('.person-tile');
-      closeState(par);
-    });
-    function closeState(par) {
-      var etmpl = '<button type="button" class="edit btn btn-small btn-warning">Edit<i class="icon-pencil icon-white"></i>';
-      par.find('ul.itemList li').each(function() {
-        if($(this).data('new')) {
-          $(this).remove();
-        }
-      });
-      if(!(par.find('ul.itemList li').length)) {
-        par.find('ul.itemList').remove();
-        etmpl = '<button type="button" class="addItem btn btn-small btn-success">Add Item</button>';
-        par.append(etmpl);
-      }
-      else {
-        par.append(etmpl);
-      }
-      par.removeClass('expanded').find('button.update, button.cancel, form.addItemMenu').remove();
-    }
-  },
-  addItem: function(t) {
     /*
-     * .submitItem
-     * .update
-     * .cancel
+     * #addItemInput
+     * #addQuantInput
+     * .addItemButton
     */
     var self = this;
-    var tpar = t.parent('.person-tile');
-    ($(tpar).find('.addItemMenu').length > 0) ? $(tpar).find('.addItemMenu').remove() : null; //Checks if addItemMenu exists, if it does, remove, if not, do nothing
-    tpar.addClass('expanded');
-    var tmpl = '<form class="form-inline addItemMenu"><input type="text" class="form-control itemEnter" placeholder="Item"><input type="number" class="form-control numberEnter" placeholder="Number"><button type="button" class="btn btn-success submitItem">+</button></form>';
-    tmpl += '<button type="button" class="update btn btn-small btn-primary">Update</button><button type="button" class="cancel btn btn-small btn-danger">Cancel</button>';
-    $(tmpl).insertAfter(t.siblings('h3'));
-    //self.addItemBinding(tpar);
-    t.remove();
+    $('div.gc').on('click', 'h3', function() {
+      if($(this).next('div').is('div:visible')) {
+        $(this).next('div').slideUp();
+      }
+      else {
+        $(this).next('div').slideDown();
+      }
+    });
+    $('div.gc').on('click', 'button.addItemButton', function() {
+      var item = $(this).siblings('#addItemInput').val();
+      var quant = $(this).siblings('#addQuantInput').val();
+      var h = $(this);
+      if($('div.active').length) {
+        $.post('/entry', {item: item, quantity: quant}, function(data) {
+          h.siblings('input').val('');
+          ($('ul li').length) ? null : $('div.person-tile.active p').remove();
+          var tmpl = '<li><span class="item">'+item+'</span><span class="quant">'+quant+'</span><button type="button" class="btn btn-small btn-danger deleteItem">X</button></li>';
+          $('div.person-tile.active ul').append(tmpl);
+          console.log(data);
+        });
+      }
+    });
+    $('div.gc').on('click', 'button.boughtToggle', function() {
+      ($(this).data('bought')) ? $(this).data('bought', false).removeClass('btn-success').addClass('btn-default') : $(this).data('bought', true).removeClass('btn-default').addClass('btn-success');
+    });
+    $('div.gc').on('click', 'button.deleteItem', function() {
+      var h = $(this);
+      var di = $(this).siblings('span.item').text();
+      $.post('/entryremove', {item: di}, function(data) {
+        console.log(data);
+        h.parent().remove();
+      });
+    });
   }
 };
 list.init();

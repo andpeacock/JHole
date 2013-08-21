@@ -115,8 +115,10 @@ app.post('/historyUpdate', ensureAuthenticated, history.update); // Update
 // ----- END HISTORY -----
 
 // ----- SHOPPING LIST -----
-// app.get('/shopping', list.index);
-// app.post('/listUp', list.update);
+app.get('/shopping', ensureAuthenticated, list.index);
+app.post('/entryupdate', ensureAuthenticated, list.update);
+app.post('/entryremove', ensureAuthenticated, list.remove);
+app.post('/entry', ensureAuthenticated, list.entry);
 // ----- END SHOPPING LIST
 
 // ----- GAS TRACKER -----

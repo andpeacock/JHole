@@ -79,7 +79,7 @@ var User = mongoose.model('User', userSchema);
 var Loot = mongoose.model('Loot', lootTrackSchema);
 exports.User = mongoose.model('User', userSchema);
 exports.Loot = mongoose.model('Loot', lootTrackSchema);
-exports.List = mongoose.model('List', lootTrackSchema);
+exports.List = mongoose.model('List', shoppingListSchema);
 exports.Gas  = mongoose.model('Gas', gasTrackSchema);
 // ----- END MODELS -----
 

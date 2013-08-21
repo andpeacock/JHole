@@ -132,17 +132,36 @@ div#hload {
 }
 
 /* ---------- SHOPPING LIST STYLES ---------- */
+div.listHold {
+  width: 700px;
+  margin: 0 auto;
+}
 .person-tile {
-  width: 214px;
-  min-height: 130px;
-  padding: 0 15px 15px;
-  margin: 0 10px 20px;
+  width: 100%;
+  /*min-height: 130px;*/
+ /* padding: 0 15px 15px;
+  margin: 0 10px 20px;*/
+  padding: 15px;
   -webkit-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.54);
   -moz-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.54);
   box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.54);
-  float: left;
   border-radius: 3px;
   position: relative;
+  /*display: none;*/
+}
+div.addItem input {
+  width: 335px;
+  display: inline-block;
+}
+div.person-tile > p {
+  margin: 0;
+}
+ul.itemList {
+  margin: 0;
+}
+ul.itemList li span.item {
+}
+ul.itemList li span.quant {
 }
 .person-tile.expanded {
   width: 446px;
