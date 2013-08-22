@@ -26,6 +26,48 @@ gm.getVer(function(version) {
   });
 });
 
+// -- HOLD --
+function removeList() {
+  dbModel.List.find({}, function(err, results) {
+    if (err) {
+      return console.log(err);
+    }
+    for(var i = 0; i < results.length; i++) {
+      results[i].remove();
+    }
+    console.log("Cleared");
+  });
+}
+function readList() {
+  dbModel.List.find({}, function(err, results) {
+    if (err) {
+      return console.log(err);
+    }
+    console.log(results);
+  });
+}
+function createList() {
+  var memberList = [
+    "Ageudum", "Akrim Stenra",  "Andrew Jester", "Brutus King", "Cardavet",
+    "Joe Poopy", "Lilum Biggum", "Mellifluous Hyperion", "Nova Kairas", "Schaeffer Gaunt",
+    "Silas Mieyli", "Simmons Hakoke", "Sinya Todako", "Tennigan Haldeye", "Yuri Lebbie",
+    "Zencron en Thelles", "807Y6DI897TU"];
+  for(var i = 0; i < memberList.length; i++) {
+    var l = new dbModel.List({
+      person: memberList[i],
+      items: []
+    });
+    l.save(function(err, l) {
+      if(err) {
+        return console.log(err);
+      }
+      console.log(l);
+    });
+  }
+  readList();
+}
+// -- HOLD --
+
 var registerPhrase = 'testing';
 mongoose.connect('mongodb://localhost/test'); //local
 //mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
