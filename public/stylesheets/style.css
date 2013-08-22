@@ -156,87 +156,53 @@ div.addItem input {
 div.person-tile > p {
   margin: 0;
 }
-ul.itemList {
+div.person-tile > ul {
   margin: 0;
 }
-ul.itemList li span.item {
+div.person-tile > ul > li {
+  height: 30px;
+  margin-bottom: 10px;
+  position: relative;
+  display: block;
 }
-ul.itemList li span.quant {
+ul > li > p {
+  line-height: 30px;
 }
-.person-tile.expanded {
-  width: 446px;
-  min-height: 280px;
+ul > li > p.item, ul > li > p.person, ul > li > p.pitem {
+  float: left;
+  margin: 0;
 }
-.person-tile.finished {
-  background: #aee3b4;
+ul > li > p.person {
+  padding-right: 15px;
 }
-.person-tile h3 {
-  text-align: center;
+ul > li > p.quant, ul > li > p.cost {
+  margin: 0;
+  text-align: right;
+  float: right;
+  padding-right: 50px;
 }
-.person-tile button.create, .person-tile button.update {
+ul > li > input.form-control {
+  width: 100px;
+  float: right;
   position: absolute;
-  top: -5px;
-  left: 0;
-  height: 8px;
-
-  -moz-transition: height 0.35s;
-  -webkit-transition: height 0.35s;
-  -o-transition: height 0.35s;
-  transition: height 0.35s;
+  right: 11px;
+  height: 30px;
+  padding: 5px;
 }
-
-.person-tile button.create:hover, .person-tile button.update:hover {
-  height: 26px;
-}
-.person-tile button.remove, .person-tile button.edit {
+ul > li > button {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 8px;
-
-  -moz-transition: height 0.35s;
-  -webkit-transition: height 0.35s;
-  -o-transition: height 0.35s;
-  transition: height 0.35s;
-}
-.person-tile button.remove:hover, .person-tile button.edit:hover {
-  height: 26px;
-}
-.person-tile label {
-  padding: 2px 0;
-}
-
-.person-tile > button {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 8px;
-  width: 100%;
-  margin: 5px 0 0 0;
-
-  -moz-transition: height 0.35s;
-  -webkit-transition: height 0.35s;
-  -o-transition: height 0.35s;
-  transition: height 0.35s;
-}
-.person-tile > button:hover {
-  height: 26px;
-}
-.person-tile input.itemEnter {
-  width: 289px;
-}
-.person-tile input.numberEnter {
-  width: 92px;
+  right: 0;
 }
 input.itemCost {
   display: inline-block;
   width: 75px;
   height: 25px;
 }
-button.boughtToggle {
-  width: 25px;
-  height: 25px;
-}
 a.userLink {
   float: right;
+}
+ul > li > button.adminDeleteItem {
+  position: absolute;
+  right: -30px;
+  top: 0;
 }

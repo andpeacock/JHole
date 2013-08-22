@@ -27,21 +27,60 @@ var list = {
         $.post('/entry', {item: item, quantity: quant}, function(data) {
           h.siblings('input').val('');
           ($('ul li').length) ? null : $('div.person-tile.active p').remove();
-          var tmpl = '<li><span class="item">'+item+'</span><span class="quant">'+quant+'</span><button type="button" class="btn btn-small btn-danger deleteItem">X</button></li>';
+          var tmpl = '<li><p class="item">'+item+'</p><p class="quant">'+quant+'</p><button type="button" class="btn btn-small btn-danger deleteItem">X</button></li>';
           $('div.person-tile.active ul').append(tmpl);
           console.log(data);
         });
       }
     });
     $('div.gc').on('click', 'button.boughtToggle', function() {
+      var tmpl = $('<input type="number" class="form-control purchaseItem" placeholder="Item cost" />');
       ($(this).data('bought')) ? $(this).data('bought', false).removeClass('btn-success').addClass('btn-default') : $(this).data('bought', true).removeClass('btn-default').addClass('btn-success');
+      if($(this).data('bought')) {
+        $(this).text('buy');
+        $(this).siblings('p.quant').css('padding-right', '121px');
+        tmpl.insertBefore($(this));
+      }
+      else {
+        var h = $(this);
+        var uvals = {
+          person: $(this).parent().parent().parent().prev('h3').text(),
+          item: $(this).siblings('p.item').text(),
+          cost: $(this).siblings('input').val()
+        }
+        console.log(uvals);
+        if(uvals.cost) {
+          $.post('/entryupdate', uvals, function(data) {
+            console.log(data);
+            h.prop('disabled', true)[0].innerHTML = '&#x2713;';
+            h.siblings('p.quant').attr('style', '').siblings('input').remove();
+          }); 
+        }
+      }
     });
     $('div.gc').on('click', 'button.deleteItem', function() {
       var h = $(this);
       var di = $(this).siblings('span.item').text();
-      $.post('/entryremove', {item: di}, function(data) {
+      var p = $(this).parent().parent().parent().prev('h3').text();
+      console.log(p);
+      $.post('/entryremove', {item: di, person: p}, function(data) {
         console.log(data);
         h.parent().remove();
+      });
+    });
+    $('div.gc').on('click', 'button.paidItem', function() {
+      var h = $(this);
+      var di = $(this).siblings('p.pitem').text();
+      var p = $(this).parent().parent().parent().prev('h3').text();
+      console.log("p: "+p);
+      console.log("di: "+di);
+      $.post('/entrypaid', {item: di, person: p}, function(data) {
+        console.log(data);
+        h.parent().remove();
+        if(!h.parent().parent('ul li').length) {
+          h.parent().parent('ul').prev('h4').remove();
+          h.parent().parent('ul').remove();
+        }
       });
     });
   }

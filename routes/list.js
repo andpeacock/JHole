@@ -2,18 +2,29 @@ var dbModel = require('../models/db')
   , moment = require('moment');
 
 exports.index = function(req, res) {
-  var owed = {};
   var hold = [];
   function callback(results) {
-    // for(var i = 0; i < results.length; i++) {
-    //   for(var j = 0; j < results[i].items.length; j++) {
-    //     if(results[i].items[j].bought == true && results[i].items[j].paid == false) {
-    //       owed[results[i].items[j].buyer] += results[i].items[j].cost;
-    //     }
-    //   }
-    // }
     for(var i = 0; i < results.length; i++) {
-      if(results[i].items.length || results[i].person == req.user.evename) {
+      if(results[i].items.length) {
+        var bOwedEmpty = true;
+        var owed = [];
+        var spsave = [];
+        for(var j = 0; j < results[i].items.length; j++) {
+          if(results[i].items[j].bought && !results[i].items[j].paid) {
+            bOwedEmpty = false;
+            owed.push({buyer: results[i].items[j].buyer, item: results[i].items[j].item, cost: results[i].items[j].cost});
+            spsave.push(j);
+          }
+        }
+        if(!bOwedEmpty) {
+          for (var k = spsave.length -1; k >= 0; k--) {
+            results[i].items.splice(spsave[k],1);
+          }
+          results[i]['owed'] = owed;
+        }
+        hold.push(results[i]);
+      }
+      else if(results[i].person == req.user.evename) {
         hold.push(results[i]);
       }
     }
@@ -42,14 +53,52 @@ exports.remove = function(req, res) {
     console.log("Pulled entry");
     res.send("pull worked");
   }
-  dbModel.update(dbModel.List, {person: req.user.evename}, {$pull: {items: {item: req.body.item}}}, callback);
+  var p = (req.user.admin) ? req.body.person : req.user.evename
+  dbModel.update(dbModel.List, {person: p}, {$pull: {'items': {'item': req.body.item}}}, callback);
+};
+
+exports.paid = function(req, res) {
+  function callback() {
+    console.log("Pulled entry");
+    res.send("pull worked");
+  }
+  dbModel.update(dbModel.List, {person: req.body.person}, {$pull: {'items': {'item': req.body.item}}}, callback);
 };
 
 exports.update = function(req, res) {
-  dbModel.List.find({person: req.user.evename, 'items.item': req.body.item}, {'items.$': req.body.item}, function(err, results) {
-    if(err) {
-      return console.log(err);
-    }
-    console.log(results);
-  });
-}
+  var udata = {
+    bought: true,
+    cost: req.body.cost,
+    buyer: req.user.evename
+  };
+  function callback() {
+    console.log("It worked");
+    res.send("Update worked");
+  }
+  dbModel.update(dbModel.List, {person: req.body.person, 'items.item': req.body.item}, {'$set': {
+    'items.$.bought': udata.bought,
+    'items.$.cost': udata.cost,
+    'items.$.buyer': udata.buyer
+  }}, callback);
+};
+// dbModel.List.update({person: 'Andrew Jester', 'items.item': 'test'}, {'$set': {
+//   'items.$.quantity': 10,
+//   'items.$.cost': 0
+// }}, function(err) {
+//   if(err) {
+//     return console.log(err);
+//   }
+//   console.log("Worked");
+// });
+// dbModel.List.find({person: 'Andrew Jester', 'items.item': 'test'}, {'items.$': 'test'}, function(err, results) {
+//     if(err) {
+//       return console.log(err);
+//     }
+//     console.log(results);
+//   });
+// dbModel.List.find({person: 'Andrew Jester'}, function(err, results) {
+//   console.log(results);
+// });
+// dbModel.List.find({person: 'Yuri Lebbie'}, function(err, results) {
+//   console.log(results);
+// });

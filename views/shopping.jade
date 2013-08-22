@@ -7,14 +7,26 @@ mixin personTile(d, act)
       if d.items.length > 0
         for it in d.items
           li
-            span.item= it.item
-            span.quant= it.quantity
+            p.item= it.item
+            p.quant= it.quantity
             if(act)
               button(type='button', class='btn btn-small btn-danger deleteItem') X
             else
-              button(type='button', class='btn btn-small btn-default boughtToggle', data-bought='false')
+              if(user.admin)
+                button(type='button', class='btn btn-small btn-danger deleteItem adminDeleteItem') X
+              button(type='button', class='btn btn-small btn-default boughtToggle', data-bought='false') +
       else
-        p No Items
+        if(act)
+          p No Items
+    if(d.owed)
+      h4 Owed
+      ul.owedList.list-unstyled
+        for itm in d.owed
+          li
+            p.person= itm.buyer
+            p.pitem= itm.item
+            p.cost= itm.cost
+            button(type='button', class='btn btn-small btn-warning paidItem', data-paid='false') P
 
 block content
   div.container

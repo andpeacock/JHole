@@ -116,6 +116,7 @@ app.post('/historyUpdate', ensureAuthenticated, history.update); // Update
 
 // ----- SHOPPING LIST -----
 app.get('/shopping', ensureAuthenticated, list.index);
+app.post('/entrypaid', ensureAuthenticated, list.paid);
 app.post('/entryupdate', ensureAuthenticated, list.update);
 app.post('/entryremove', ensureAuthenticated, list.remove);
 app.post('/entry', ensureAuthenticated, list.entry);
