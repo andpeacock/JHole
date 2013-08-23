@@ -4,16 +4,6 @@ var mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
   , SALT_WORK_FACTOR = 10;
 
-// exports.init = function() {
-//   //mongoose.connect('mongodb://localhost/test'); //local
-//   mongoose.connect('mongodb://nodejitsu:56fd99802c64c6dc6255cf80a80bae99@dharma.mongohq.com:10098/nodejitsudb4207727473'); //deploy
-//   var db = mongoose.connection;
-//   db.on('error', console.error.bind(console, 'connection error:'));
-//   db.once('open', function callback () {
-//     cnct = true;
-//   });
-// };
-
 // ----- SCHEMAS -----
 var userSchema = mongoose.Schema({
   username: {type: String, required: true, unique: true},
