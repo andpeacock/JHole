@@ -113,7 +113,6 @@ app.get('/', ensureAuthenticated, function(req, res){
   res.render('index');
 });
 app.get('/login', function(req, res){
-  //console.log("req.user: "+req.user);
   res.render('login', { user: req.user, message: req.session.messages });
 });
 app.post('/login', function(req, res, next) {
@@ -189,39 +188,3 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 }
-
-// ----- DB Setup loops -----
-/*
- * Gas DB setup
-for(var i = 0; i < memberList.length; i++) {
-  var g = new Gas({
-    person: memberList[i],
-    c320: 0,
-    c540: 0,
-    other: 0,
-    redeemed: 0
-  });
-  g.save(function(err, g) {
-    if(err) {
-      return console.log(err);
-    }
-    console.log(g);
-  });
-}
-*/
-/*
- * Gas DB reset
-Gas.find({}, function(err, results) {
-  if (err) {
-    return console.log(err);
-  }
-  for(var i = 0; i < results.length; i++) {
-    results[i].remove();
-  } 
-});
-*/
-// ----- END Setup loops -----
-
-// http.createServer(app).listen(app.get('port'), function(){
-//   console.log('Express server listening on port ' + app.get('port'));
-// });

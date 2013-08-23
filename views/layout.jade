@@ -17,6 +17,7 @@ html
         if(user)
           a(href='/shopping', class='btn btn-primary') Shopping
           a(href='/me', class='btn btn-primary userLink')= (user.evename) ? user.evename : user.username
+        a(href='https://jhole.evewspace.com/', class='btn btn-primary', target='_blank') Mapper
       block content
 
       if(user)

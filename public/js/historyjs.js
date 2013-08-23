@@ -19,23 +19,19 @@ var history = {
   binding: function() {
     var self = this;
     $('div.gc').on('click', 'button.updt', self.updt);
-    $('div.gc').on('click', 'button.loot-paid', function() {
-      $(this).removeClass('btn-default').addClass('btn-success').siblings('button').removeClass('btn-danger btn-warning').addClass('btn-default');
-      $(this).parent().data('paid', true).data('excl', false);
-      $(this).parent().parent().attr('class', 'success');
+    function genc(t, sc, bp, be) {
+      t.removeClass('btn-default').addClass('btn-'+sc).siblings('button').removeClass('btn-success btn-danger btn-warning').addClass('btn-default');
+      t.parent().data('paid', bp).data('excl', be).parent().attr('class', sc);
       self.ivals();
+    }
+    $('div.gc').on('click', 'button.loot-paid', function() {
+      genc($(this), 'success', true, false);
     });
     $('div.gc').on('click', 'button.not-paid', function() {
-      $(this).removeClass('btn-default').addClass('btn-danger').siblings('button').removeClass('btn-success btn-warning').addClass('btn-default');
-      $(this).parent().data('paid', false).data('excl', false);
-      $(this).parent().parent().attr('class', '');
-      self.ivals();
+      genc($(this), 'danger', false, false);
     });
     $('div.gc').on('click', 'button.loot-excl', function() {
-      $(this).removeClass('btn-default').addClass('btn-warning').siblings('button').removeClass('btn-danger btn-success').addClass('btn-default');
-      $(this).parent().data('paid', false).data('excl', true);
-      $(this).parent().parent().attr('class', 'warning');
-      self.ivals();
+      genc($(this), 'warning', false, true);
     });
     $('input#totalRVal').on('keyup', self.totalPer);
     $('div.gc').on('click', 'td.imp button.import', function() {
@@ -243,7 +239,7 @@ var history = {
       $.get('/trackerDown', {'iid': x}, function(data) {
         ($('#hload').length) ? $('#hload').remove() : null;
         $(data.html).appendTo($('.container'));
-        $('#hload').slideDown();
+        $('#hload').css('top', window.scrollY + 'px').slideDown();
         tmpl(data.data);
       });
     }

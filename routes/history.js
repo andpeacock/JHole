@@ -29,7 +29,6 @@ var tabelRender = function(callback) {
  */
 
 exports.index = function(req, res) {
-  console.log(req.user);
   tabelRender(function (d) {
     res.render('history', {
       data: d,

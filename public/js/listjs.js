@@ -48,7 +48,6 @@ var list = {
           item: $(this).siblings('p.item').text(),
           cost: $(this).siblings('input').val()
         }
-        console.log(uvals);
         if(uvals.cost) {
           $.post('/entryupdate', uvals, function(data) {
             console.log(data);
@@ -62,9 +61,7 @@ var list = {
       var h = $(this);
       var di = $(this).siblings('span.item').text();
       var p = $(this).parent().parent().parent().prev('h3').text();
-      console.log(p);
       $.post('/entryremove', {item: di, person: p}, function(data) {
-        console.log(data);
         h.parent().remove();
       });
     });
@@ -72,10 +69,7 @@ var list = {
       var h = $(this);
       var di = $(this).siblings('p.pitem').text();
       var p = $(this).parent().parent().parent().prev('h3').text();
-      console.log("p: "+p);
-      console.log("di: "+di);
       $.post('/entrypaid', {item: di, person: p}, function(data) {
-        console.log(data);
         h.parent().remove();
         if(!h.parent().parent('ul li').length) {
           h.parent().parent('ul').prev('h4').remove();
