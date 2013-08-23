@@ -13,37 +13,37 @@ block content
             input(type='text', name='evename')
             button(type='submit', class='btn btn-default') Submit
       if(user.admin)
-      div.list-group-item
-        div.panel.panel-default
-          h1.panel-heading.list-group-item-heading Member List
-          table.table.table-striped.table-hover.table-condensed
-            thead
-              tr
-                td Username
-                td Email
-                td Eve main
-                td Delete
-                td Edit
-                td Status
-            tbody
-              for m in memberList
+        div.list-group-item
+          div.panel.panel-default
+            h1.panel-heading.list-group-item-heading Member List
+            table.table.table-striped.table-hover.table-condensed
+              thead
                 tr
-                  td.user= m.user
-                  td.email= m.email
-                  td.evename= m.eve
-                  td.delCont
-                    button.btn.btn-danger.adminUserDel Delete
-                  td.editCont
-                    button.btn.btn-warning.adminUserEdit Edit
-                  if(m.admin)
-                    td.status admin
-                  else
-                    td.status user
-      div.list-group-item
-        h1.list-group-item-heading Update Registration Phrase
-        form(action='/registerPhrase', method='post').phraseForm
-          label(for='updatePhrase')
-          div.input-group
-            input(type='text', name='updatePhrase', class='form-control', id='updatePhrase', placeholder='Update registration phrase')
-            span.input-group-btn
-              button(type='submit', class='btn btn-default') Update phrase
+                  td Username
+                  td Email
+                  td Eve main
+                  td Delete
+                  td Edit
+                  td Status
+              tbody
+                for m in memberList
+                  tr
+                    td.user= m.user
+                    td.email= m.email
+                    td.evename= m.eve
+                    td.delCont
+                      button.btn.btn-danger.adminUserDel Delete
+                    td.editCont
+                      button.btn.btn-warning.adminUserEdit Edit
+                    if(m.admin)
+                      td.status admin
+                    else
+                      td.status user
+        div.list-group-item
+          h1.list-group-item-heading Update Registration Phrase
+          form(action='/registerPhrase', method='post').phraseForm
+            label(for='updatePhrase')
+            div.input-group
+              input(type='text', name='updatePhrase', class='form-control', id='updatePhrase', placeholder='Update registration phrase')
+              span.input-group-btn
+                button(type='submit', class='btn btn-default') Update phrase
