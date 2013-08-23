@@ -9,7 +9,7 @@ exports.getVer = function(callback) {
     version = JSON.parse(data).version;
     callback(version);
   });
-}
+};
 exports.removeList = function() {
   dbModel.List.find({}, function(err, results) {
     if (err) {
@@ -20,7 +20,7 @@ exports.removeList = function() {
     }
     console.log("Cleared");
   });
-}
+};
 exports.readList = function() {
   dbModel.List.find({}, function(err, results) {
     if (err) {
@@ -28,7 +28,7 @@ exports.readList = function() {
     }
     console.log(results);
   });
-}
+};
 exports.createList = function() {
   var memberList = [
     "Ageudum", "Akrim Stenra",  "Andrew Jester", "Brutus King", "Cardavet",
@@ -47,5 +47,4 @@ exports.createList = function() {
       console.log(l);
     });
   }
-  readList();
-}
+};

@@ -2,40 +2,45 @@ extends layout
 
 block content
   div.container
-    if(user.evename)
-      h1= user.evename
-      p Estimate total amount owed: #{total}
-    else
-      form(action='/evename', method='post')
-        label Enter eve main character name:
-        input(type='text', name='evename')
-        button(type='submit', class='btn btn-default') Submit
-    if(user.admin)
-      h1 Member List
-      table.table.table-striped.table-hover.table-bordered.table-condensed
-        thead
-          tr
-            td Username
-            td Email
-            td Eve main
-            td Delete
-            td Edit
-            td Status
-        tbody
-          for m in memberList
-            tr
-              td.user= m.user
-              td.email= m.email
-              td.evename= m.eve
-              td.delCont
-                button.btn.btn-danger.adminUserDel Delete
-              td.editCont
-                button.btn.btn-warning.adminUserEdit Edit
-              if(m.admin)
-                td.status admin
-              else
-                td.status user
-      h1 Update Registration Phrase
+    div.list-group
+      div.list-group-item
+        if(user.evename)
+          h1.list-group-item-heading= user.evename
+          p.list-group-item-text Estimate total amount owed: #{total}
+        else
+          form(action='/evename', method='post')
+            label Enter eve main character name:
+            input(type='text', name='evename')
+            button(type='submit', class='btn btn-default') Submit
+      if(user.admin)
+      div.list-group-item
+        div.panel.panel-default
+          h1.panel-heading.list-group-item-heading Member List
+          table.table.table-striped.table-hover.table-condensed
+            thead
+              tr
+                td Username
+                td Email
+                td Eve main
+                td Delete
+                td Edit
+                td Status
+            tbody
+              for m in memberList
+                tr
+                  td.user= m.user
+                  td.email= m.email
+                  td.evename= m.eve
+                  td.delCont
+                    button.btn.btn-danger.adminUserDel Delete
+                  td.editCont
+                    button.btn.btn-warning.adminUserEdit Edit
+                  if(m.admin)
+                    td.status admin
+                  else
+                    td.status user
+      div.list-group-item
+        h1.list-group-item-heading Update Registration Phrase
         form(action='/registerPhrase', method='post').phraseForm
           label(for='updatePhrase')
           div.input-group
