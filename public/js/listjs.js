@@ -12,12 +12,7 @@ var list = {
     */
     var self = this;
     $('div.gc').on('click', 'h3', function() {
-      if($(this).next('div').is('div:visible')) {
-        $(this).next('div').slideUp();
-      }
-      else {
-        $(this).next('div').slideDown();
-      }
+      ($(this).parent().next('div').is('div:visible')) ? $(this).parent().next('div').slideUp() : $(this).parent().next('div').slideDown();
     });
     $('div.gc').on('click', 'button.addItemButton', function() {
       var item = $(this).siblings('#addItemInput').val();
@@ -38,13 +33,13 @@ var list = {
       ($(this).data('bought')) ? $(this).data('bought', false).removeClass('btn-success').addClass('btn-default') : $(this).data('bought', true).removeClass('btn-default').addClass('btn-success');
       if($(this).data('bought')) {
         $(this).text('buy');
-        $(this).siblings('p.quant').css('padding-right', '121px');
+        $(this).siblings('p.quant').css('padding-right', '130px');
         tmpl.insertBefore($(this));
       }
       else {
         var h = $(this);
         var uvals = {
-          person: $(this).parent().parent().parent().prev('h3').text(),
+          person: $(this).parent().parent().parent().prev('div').find('h3').text(),
           item: $(this).siblings('p.item').text(),
           cost: $(this).siblings('input').val()
         }
@@ -59,8 +54,8 @@ var list = {
     });
     $('div.gc').on('click', 'button.deleteItem', function() {
       var h = $(this);
-      var di = $(this).siblings('span.item').text();
-      var p = $(this).parent().parent().parent().prev('h3').text();
+      var di = $(this).siblings('p.item').text();
+      var p = $(this).parent().parent().parent().prev('div').find('h3').text();
       $.post('/entryremove', {item: di, person: p}, function(data) {
         h.parent().remove();
       });
@@ -68,7 +63,7 @@ var list = {
     $('div.gc').on('click', 'button.paidItem', function() {
       var h = $(this);
       var di = $(this).siblings('p.pitem').text();
-      var p = $(this).parent().parent().parent().prev('h3').text();
+      var p = $(this).parent().parent().parent().prev('div').find('h3').text();
       $.post('/entrypaid', {item: di, person: p}, function(data) {
         h.parent().remove();
         if(!h.parent().parent('ul li').length) {

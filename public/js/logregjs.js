@@ -3,17 +3,18 @@ var logreg = {
     this.binding();
   },
   binding: function() {
-    $('button.log').click(function() {
-      $(this).siblings().removeClass('btn-success').addClass('btn-default');
-      $(this).removeClass('btn-default').addClass('btn-success');
-      $('div.regcont').hide();
-      $('div.logcont').show();
+    function lrhs(t, ch, cs) {
+      t.parent().addClass('active').siblings().removeClass('active');
+      $('div.'+ch).hide();
+      $('div.'+cs).show();
+    }
+    $('li.log a').click(function() {
+      lrhs($(this), 'regcont', 'logcont');
+      return false;
     });
-    $('button.reg').click(function() {
-      $(this).siblings().removeClass('btn-success').addClass('btn-default');
-      $(this).removeClass('btn-default').addClass('btn-success');
-      $('div.logcont').hide();
-      $('div.regcont').show();
+    $('li.reg a').click(function() {
+      lrhs($(this), 'logcont', 'regcont');
+      return false;
     })
   }
 };

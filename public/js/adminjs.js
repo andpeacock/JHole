@@ -63,11 +63,11 @@ var admin = {
         $(this).data('hold', $(this).text());
         $(this).html('<input type="text" class="form-control" placeholder="'+$(this).text()+'" />');
       });
-      $('<button type="button" class="btn btn-success adminUserEditSubmit">Submit</button><button type="button" class="btn btn-default adminUserEditCancel">Cancel</button>').insertAfter($(this));
+      $('<div class="btn-group"><button type="button" class="btn btn-success adminUserEditSubmit">Submit</button><button type="button" class="btn btn-default adminUserEditCancel">Cancel</button></div>').insertAfter($(this));
       $(this).remove();
     });
     $('div.gc').on('click', '.adminUserEditSubmit', function() {
-      var tp = $(this).parent();
+      var tp = $(this).parent().parent();
       function dataa(sel) {
         var h = tp.siblings('td.'+sel);
         return (h.find('input').val()) ? h.find('input').val() : h.data('hold');
@@ -85,7 +85,7 @@ var admin = {
       });
     });
     $('div.gc').on('click', '.adminUserEditCancel', function() {
-      var tp = $(this).parent();
+      var tp = $(this).parent().parent();
       tp.parent().find('td:not(.delCont, .editCont, .status)').each(function() {
         $(this).text($(this).data('hold'));
       });

@@ -1,32 +1,34 @@
 extends layout
 
 mixin personTile(d, act)
-  h3 #{d.person}
-  div(class=(act) ? 'active' : '').person-tile
-    ul.itemList.list-unstyled
-      if d.items.length > 0
-        for it in d.items
-          li
-            p.item= it.item
-            p.quant= it.quantity
-            if(act)
-              button(type='button', class='btn btn-small btn-danger deleteItem') X
-            else
-              if(user.admin)
-                button(type='button', class='btn btn-small btn-danger deleteItem adminDeleteItem') X
-              button(type='button', class='btn btn-small btn-default boughtToggle', data-bought='false') +
-      else
-        if(act)
-          p No Items
-    if(d.owed)
-      h4 Owed
-      ul.owedList.list-unstyled
-        for itm in d.owed
-          li
-            p.person= itm.buyer
-            p.pitem= itm.item
-            p.cost= itm.cost
-            button(type='button', class='btn btn-small btn-warning paidItem', data-paid='false') P
+  div(class=(act) ? 'active panel-primary' : 'panel-default').panel
+    div.panel-heading
+      h3.panel-title #{d.person}
+    div(class=(act) ? 'active' : '').person-tile.panel-body
+      ul.itemList.list-unstyled
+        if d.items.length > 0
+          for it in d.items
+            li
+              p.item= it.item
+              p.quant= it.quantity
+              if(act)
+                button(type='button', class='btn btn-small btn-danger deleteItem') X
+              else
+                if(user.admin)
+                  button(type='button', class='btn btn-small btn-danger deleteItem adminDeleteItem') X
+                button(type='button', class='btn btn-small btn-default boughtToggle', data-bought='false') +
+        else
+          if(act)
+            p No Items
+      if(d.owed)
+        h4 Owed
+        ul.owedList.list-unstyled
+          for itm in d.owed
+            li
+              p.person= itm.buyer
+              p.pitem= itm.item
+              p.cost= itm.cost
+              button(type='button', class='btn btn-small btn-warning paidItem', data-paid='false') P
 
 block content
   div.container

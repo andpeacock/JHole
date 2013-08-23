@@ -53,7 +53,7 @@ exports.remove = function(req, res) {
     console.log("Pulled entry");
     res.send("pull worked");
   }
-  var p = (req.user.admin) ? req.body.person : req.user.evename
+  var p = (req.user.admin) ? req.body.person : req.user.evename;
   dbModel.update(dbModel.List, {person: p}, {$pull: {'items': {'item': req.body.item}}}, callback);
 };
 

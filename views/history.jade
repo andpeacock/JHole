@@ -3,20 +3,23 @@ extends layout
 mixin disab(d)
   if d.excl == true
     td.paid(data-paid="false", data-excl="true")
-      button(disabled=!user.admin).btn.btn-default.loot-paid y
-      button(disabled=!user.admin).btn.btn-default.not-paid n
-      button(disabled=!user.admin).btn.btn-warning.loot-excl e
+      div.btn-group
+        button(disabled=!user.admin).btn.btn-default.loot-paid y
+        button(disabled=!user.admin).btn.btn-default.not-paid n
+        button(disabled=!user.admin).btn.btn-warning.loot-excl e
   else
     if d.paid == true
-      td.paid(data-paid="true", data-excl="false") 
-        button(disabled=!user.admin).btn.btn-success.loot-paid y
-        button(disabled=!user.admin).btn.btn-default.not-paid n
-        button(disabled=!user.admin).btn.btn-default.loot-excl e
+      td.paid(data-paid="true", data-excl="false")
+        div.btn-group
+          button(disabled=!user.admin).btn.btn-success.loot-paid y
+          button(disabled=!user.admin).btn.btn-default.not-paid n
+          button(disabled=!user.admin).btn.btn-default.loot-excl e
     else
       td.paid(data-paid="false", data-excl="false")
-        button(disabled=!user.admin).btn.btn-default.loot-paid y 
-        button(disabled=!user.admin).btn.btn-danger.not-paid n
-        button(disabled=!user.admin).btn.btn-default.loot-excl e
+        div.btn-group
+          button(disabled=!user.admin).btn.btn-default.loot-paid y 
+          button(disabled=!user.admin).btn.btn-danger.not-paid n
+          button(disabled=!user.admin).btn.btn-default.loot-excl e
 
 block nav
   a(href='/tracker', class='btn btn-success', id='trackerStart') Tracker
