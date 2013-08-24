@@ -1,0 +1,9 @@
+Install node
+Install MongoDB
+
+in root directory do "npm install".
+It is posible you will need to delete node_mobules/ content before modules are rebuilt
+
+Launch app in root directory "node app.js"
+
+if you get errors about bson it means that you need different node version most likely
