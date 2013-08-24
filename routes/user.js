@@ -11,7 +11,7 @@ exports.index = function(req, res) {
     function callback(results, user) {
       var total = 0;
       var user = req.user.evename;
-      if(results[0].main[user]) {
+      if((typeof results[0]) != 'undefined' && results[0].main[user]) {
         for(var i = 0; i < results.length; i++) {
           total += parseInt(results[i].main[user].total);
         }
