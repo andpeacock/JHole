@@ -5,7 +5,7 @@ var memberList = [
   "Ageudum", "Akrim Stenra",  "Andrew Jester", "Brutus King", "Cardavet",
   "Joe Poopy", "Lilum Biggum", "Mellifluous Hyperion", "Nova Kairas", "Schaeffer Gaunt",
   "Silas Mieyli", "Simmons Hakoke", "Sinya Todako", "Tennigan Haldeye", "Yuri Lebbie",
-  "Zencron en Thelles", "807Y6DI897TU"];
+  "Zencron en Thelles", "807Y6DI897TU", "gamma587", "Oni Cesaro"];
 /*
  * GET tracker data and table.
  */

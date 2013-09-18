@@ -21,7 +21,7 @@ var history = {
     $('div.gc').on('click', 'button.updt', self.updt);
     function genc(t, sc, bp, be) {
       t.removeClass('btn-default').addClass('btn-'+sc).siblings('button').removeClass('btn-success btn-danger btn-warning').addClass('btn-default');
-      t.parent().parent().data('paid', bp).data('excl', be).parent().parent().attr('class', sc);
+      t.parent().parent().data('paid', bp).data('excl', be).parent().attr('class', sc);
       self.ivals();
     }
     $('div.gc').on('click', 'button.loot-paid', function() {
@@ -89,6 +89,7 @@ var history = {
       $.get('/historyTable', function(data) {
         $('#payouts tbody').empty().append(data);
         $('input#totalRVal').trigger('keyup');
+        history.ivals();
       });
     });
   },

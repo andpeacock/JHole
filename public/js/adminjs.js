@@ -22,7 +22,7 @@ var admin = {
       var x = {
         'iid': th.siblings('h1#iid').text(),
         'paid': true,
-        'realVal': th.siblings('div.loadVals').find('td.vReal input').val(),
+        'realVal': th.siblings('#vals').find('tbody tr td.vReal input').val(),
         'excl': false
       };
       $.post('/historyUpdate', x, function(data) {

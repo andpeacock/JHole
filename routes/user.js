@@ -8,14 +8,14 @@ var dbModel = require('../models/db')
 
 exports.index = function(req, res) {
   if(req.user.evename) {
-    function callback(results, user) {
+    //function callback(results, userr) {
       var total = 0;
       var user = req.user.evename;
-      if(results[0].main[user]) {
-        for(var i = 0; i < results.length; i++) {
-          total += parseInt(results[i].main[user].total);
-        }
-      }
+      // if(results[0].main[user]) {
+      //   for(var i = 0; i < results.length; i++) {
+      //     total += parseInt(results[i].main[user].total);
+      //   }
+      // }
       if(req.user.admin) {
         function cb(results) {
           var ul = []
@@ -34,8 +34,8 @@ exports.index = function(req, res) {
           total: total
         });
       }
-    }
-    dbModel.find(dbModel.Loot, {'paidOut': false}, callback);
+    //}
+    //dbModel.find(dbModel.Loot, {'paidOut': false}, callback);
   }
   else {
     res.render('user', {
@@ -54,7 +54,7 @@ exports.updateEve = function(req, res) {
     res.redirect('/me');
   }
   dbModel.update(dbModel.User, {'username': req.user.username}, {'evename': req.body.evename}, callback);
-}
+};
 
 /*
  * POST delete username
@@ -65,7 +65,7 @@ exports.removeUser = function(req, res) {
     res.send("Success");
   }
   dbModel.remove(dbModel.User, {'username': req.body.username}, callback);
-}
+};
 
 /*
  * POST edit user
@@ -82,4 +82,4 @@ exports.editUser = function(req, res) {
     evename: req.body.evename
   };
   dbModel.update(dbModel.User, {'username': req.body.inituser}, udata, callback);
-}
+};

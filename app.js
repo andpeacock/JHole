@@ -27,8 +27,8 @@ gm.getVer(function(version) {
 });
 
 var registerPhrase = 'testing';
-mongoose.connect('mongodb://localhost/test'); //local
-//mongoose.connect(process.env.DBCONN); //deploy
+//mongoose.connect('mongodb://localhost/test'); //local
+mongoose.connect(process.env.DBCONN); //deploy
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
@@ -48,7 +48,7 @@ app.use(express.session({ secret: 'testsecret' }));
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session({secret: 'testsecret'}));
 app.use(function(req, res, next){
   res.locals.session = req.session;
   res.locals.user = req.user;

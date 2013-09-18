@@ -47,9 +47,13 @@ var list = {
           $.post('/entryupdate', uvals, function(data) {
             console.log(data);
             h.prop('disabled', true)[0].innerHTML = '&#x2713;';
-            h.siblings('p.quant').attr('style', '').siblings('input').remove();
+            
           }); 
         }
+        else {
+          $(this).text('+');
+        }
+        h.siblings('p.quant').attr('style', '').siblings('input').remove();
       }
     });
     $('div.gc').on('click', 'button.deleteItem', function() {
