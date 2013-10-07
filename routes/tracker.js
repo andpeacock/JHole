@@ -2,10 +2,10 @@ var dbModel = require('../models/db')
   , moment = require('moment');
 
 var memberList = [
-  "Ageudum", "Akrim Stenra",  "Andrew Jester", "Brutus King", "Cardavet",
-  "Joe Poopy", "Lilum Biggum", "Mellifluous Hyperion", "Nova Kairas", "Schaeffer Gaunt",
+  "Ageudum", "Andrew Jester", "Brutus King", "Cardavet", "Ciaran Kioni", "gamma587",
+  "Lilum Biggum", "Mellifluous Hyperion", "Nova Kairas", "Oni Cesaro", "Schaeffer Gaunt",
   "Silas Mieyli", "Simmons Hakoke", "Sinya Todako", "Tennigan Haldeye", "Yuri Lebbie",
-  "Zencron en Thelles", "807Y6DI897TU", "gamma587", "Oni Cesaro"];
+  "Zencron en Thelles", "807Y6DI897TU"];
 /*
  * GET tracker data and table.
  */

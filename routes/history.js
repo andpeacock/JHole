@@ -5,18 +5,20 @@ var tabelRender = function(callback) {
   var d = [];
   function innc(results) {
     for(var i = 0; i < results.length; i++) {
-      var et = 0;
-      for (key in results[i].groups) {
-        et += parseInt(results[i].groups[key]['estTotal']);
+      if(!results[i].paidOut) {
+        var et = 0;
+        for (key in results[i].groups) {
+          et += parseInt(results[i].groups[key]['estTotal']);
+        }
+        d.push({
+          iid: results[i].iid,
+          date: moment(results[i].date).format("MM/DD"),
+          estTotal: et,
+          realVal: results[i].realVal,
+          paid: (results[i].paidOut) ? results[i].paidOut : false,
+          excl: (results[i].excl) ? results[i].excl : false
+        });
       }
-      d.push({
-        iid: results[i].iid,
-        date: moment(results[i].date).format("MM/DD"),
-        estTotal: et,
-        realVal: results[i].realVal,
-        paid: (results[i].paidOut) ? results[i].paidOut : false,
-        excl: (results[i].excl) ? results[i].excl : false
-      });
     }
     callback(d);
   }

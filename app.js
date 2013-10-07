@@ -27,8 +27,15 @@ gm.getVer(function(version) {
 });
 
 var registerPhrase = 'testing';
-//mongoose.connect('mongodb://localhost/test'); //local
-mongoose.connect(process.env.DBCONN); //deploy
+if ('development' == app.get('env')) {
+  app.use(express.errorHandler());
+  mongoose.connect('mongodb://localhost/test'); //local
+}
+else {
+  mongoose.connect(process.env.DBCONN); //deploy
+}
+// mongoose.connect('mongodb://localhost/test'); //local
+// mongoose.connect(process.env.DBCONN); //deploy
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
@@ -58,9 +65,9 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
+// if ('development' == app.get('env')) {
+//   app.use(express.errorHandler());
+// }
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

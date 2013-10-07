@@ -1,26 +1,5 @@
 extends layout
 
-mixin disab(d)
-  if d.excl == true
-    td.paid(data-paid="false", data-excl="true")
-      div.btn-group
-        button(disabled=!user.admin).btn.btn-default.loot-paid y
-        button(disabled=!user.admin).btn.btn-default.not-paid n
-        button(disabled=!user.admin).btn.btn-warning.loot-excl e
-  else
-    if d.paid == true
-      td.paid(data-paid="true", data-excl="false")
-        div.btn-group
-          button(disabled=!user.admin).btn.btn-success.loot-paid y
-          button(disabled=!user.admin).btn.btn-default.not-paid n
-          button(disabled=!user.admin).btn.btn-default.loot-excl e
-    else
-      td.paid(data-paid="false", data-excl="false")
-        div.btn-group
-          button(disabled=!user.admin).btn.btn-default.loot-paid y 
-          button(disabled=!user.admin).btn.btn-danger.not-paid n
-          button(disabled=!user.admin).btn.btn-default.loot-excl e
-
 block nav
   a(href='/tracker', class='btn btn-success', id='trackerStart') Tracker
 
@@ -50,16 +29,5 @@ block content
           td Final Total
           td % of Est.
       tbody
-        each d in data
-          tr
-            td.iid #{d.iid}
-            td #{d.date}
-            td.imp
-              button.import.btn.btn-primary Load
-            td.updt
-              button(disabled=!user.admin).updt.btn.btn-warning Update
-            +disab(d)
-            td.estTotal #{d.estTotal}
-            td.ftotal #{d.realVal}
-            td.perc percent
+        include _historytbody
   script(src='/js/historyjs.js')
